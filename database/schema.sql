@@ -122,7 +122,7 @@ CREATE TABLE responde (
 	nota NUMERIC(5,2) CHECK (nota >= 0),
 	
 	PRIMARY KEY (id_avaliacao, email_usuario, id_questao),
-	FOREIGN KEY (id_avaliacao, email_usuario) REFERENCES realiza(id_avaliacao, email_usuario),
+	FOREIGN KEY (id_avaliacao, email_usuario) REFERENCES realiza(id_avaliacao, email_aluno),
 	FOREIGN KEY (id_avaliacao, id_questao) REFERENCES avaliacao_questao(id_avaliacao, id_questao),
 	FOREIGN KEY (id_questao, id_alternativa_escolhida) REFERENCES alternativa(id_questao_objetiva, id_alternativa)
 );
