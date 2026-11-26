@@ -58,4 +58,23 @@ JOIN usuario aluno
 	ON aluno.email = propria.email_aluno
 WHERE propria.email_aluno = ?
 ORDER BY a.data_avaliacao;
-	
+
+-- RELATÓRIO 3: Evolução das notas do aluno
+SELECT
+	a.id_avaliacao,
+	a.titulo,
+	a.data_avaliacao,
+	SUM(r.nota) AS nota_total
+FROM realiza re
+JOIN avaliacao a
+	ON a.id_avaliacao = re.id_avaliacao
+LEFT JOIN responde r
+	ON a.id_avaliacao = r.id_avaliacao
+	AND re.email_aluno = r.email_usuario
+WHERE re.email_aluno = ?
+	AND a.data_avaliacao BETWEEN ? AND ?
+GROUP BY
+	a.id_avaliacao,
+	a.titulo,
+	a.data_avaliacao
+ORDER BY a.data_avaliacao;
