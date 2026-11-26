@@ -114,15 +114,15 @@ CREATE TABLE realiza (
 );
 
 CREATE TABLE responde (
-	id_avaliacao BIGINT NOT NULL,
-    email_aluno VARCHAR(150) NOT NULL,
-    id_questao BIGINT NOT NULL,
-    resposta TEXT NOT NULL,
-    nota NUMERIC(8,2) NOT NULL CHECK (nota >= 0),
-    
-    PRIMARY KEY (id_avaliacao, email_aluno, id_questao),
-    FOREIGN KEY (id_avaliacao, email_aluno)
-    REFERENCES realiza(id_avaliacao, email_aluno),
-    FOREIGN KEY (id_avaliacao, id_questao)
-    REFERENCES avaliacao_questao(id_avaliacao, id_questao)
+	id_avaliacao BIGINT,
+	email_usuario VARCHAR(150),
+	id_questao BIGINT,
+	resposta_subjetiva TEXT,
+	id_alternativa_escolhida BIGINT,
+	nota NUMERIC(5,2) CHECK (nota >= 0),
+	
+	PRIMARY KEY (id_avaliacao, email_usuario, id_questao),
+	FOREIGN KEY (id_avaliacao, email_usuario) REFERENCES realiza(id_avaliacao, email_usuario),
+	FOREIGN KEY (id_avaliacao, id_questao) REFERENCES avaliacao_questao(id_avaliacao, id_questao),
+	FOREIGN KEY (id_questao, id_alternativa_escolhida) REFERENCES alternativa(id_questao_objetiva, id_alternativa)
 );
