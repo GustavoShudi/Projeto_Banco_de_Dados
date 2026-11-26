@@ -46,14 +46,12 @@ public class Controller {
         this.relatorios = relatorios;
     }
 
-    /** Qualquer erro vira {"erro": "..."} com status 400, para a tela mostrar a mensagem. */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> erro(RuntimeException e) {
         return Map.of("erro", String.valueOf(e.getMessage()));
     }
 
-    // ---------- login (simples, sem sessão) ----------
     @PostMapping("/login")
     public Usuario login(@RequestBody Login l) {
         return usuarios.login(l.email(), l.senha())
@@ -75,7 +73,7 @@ public class Controller {
         return usuarios.listarAlunos();
     }
 
-    // ---------- RF1: questões ----------
+    // Questões
     @GetMapping("/questoes")
     public List<Questao> listarQuestoes() {
         return questoes.listar();
@@ -101,7 +99,7 @@ public class Controller {
         return Map.of("id", questoes.inserir(q));
     }
 
-    // ---------- RF2, RF3, RF4: avaliações ----------
+    // Avaliações
     @GetMapping("/avaliacoes")
     public List<Map<String, Object>> listarAvaliacoes() {
         return avaliacoes.listar();
@@ -118,7 +116,7 @@ public class Controller {
         return Map.of("id", avaliacoes.inserir(a));
     }
 
-    // ---------- RF5: aluno responde ----------
+    // Respostas
     @GetMapping("/avaliacoes/do-aluno")
     public List<Map<String, Object>> doAluno(@RequestParam("email") String email) {
         return avaliacoes.listarDoAluno(email);
@@ -140,7 +138,7 @@ public class Controller {
         return avaliacoes.resultado(email, id);
     }
 
-    // ---------- RF6: professor corrige o texto livre ----------
+    // Correção
     @GetMapping("/correcao")
     public List<Map<String, Object>> pendentes() {
         return avaliacoes.pendentesDeCorrecao();
@@ -152,7 +150,7 @@ public class Controller {
         return Map.of("ok", "Nota lançada.");
     }
 
-    // ---------- RF7: relatórios ----------
+    // Relatórios
     @GetMapping("/relatorios/media-por-avaliacao")
     public List<Map<String, Object>> r1() {
         return relatorios.mediaPorAvaliacao();
