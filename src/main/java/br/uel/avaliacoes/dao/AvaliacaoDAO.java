@@ -943,7 +943,6 @@ public class AvaliacaoDAO {
             }
 
             // Atualizar nota total quando possível
-
             recalcularNotaTotal(
                     con,
                     idAvaliacao,
