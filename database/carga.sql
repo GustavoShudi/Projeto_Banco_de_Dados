@@ -1,837 +1,484 @@
+BEGIN;
 INSERT INTO usuario (email, nome, senha, tipo) VALUES
-  ('anderson@uel.br', 'Prof. Anderson', 'prof123', 'PROFESSOR'),
-  ('andrielber@uel.br', 'Prof. Andrielber', 'prof123', 'PROFESSOR'),
-  ('pedro@aluno.uel.br', 'Pedro', '123456', 'ALUNO'),
-  ('gustavo@aluno.uel.br', 'Gustavo', '123456', 'ALUNO'),
-  ('alef@aluno.uel.br', 'Alef', '123456', 'ALUNO'),
-  ('emilly@aluno.uel.br', 'Emilly', '123456', 'ALUNO'),
-  ('renan@aluno.uel.br', 'Renan', '123456', 'ALUNO'),
-  ('kelissa@aluno.uel.br', 'Kelissa', '123456', 'ALUNO'),
-  ('kaua@aluno.uel.br', 'Kaua', '123456', 'ALUNO'),
-  ('leonardo@aluno.uel.br', 'Leonardo', '123456', 'ALUNO'),
-  ('ruan@aluno.uel.br', 'Ruan', '123456', 'ALUNO'),
-  ('gabriel@aluno.uel.br', 'Gabriel', '123456', 'ALUNO'),
-  ('heloisa@aluno.uel.br', 'Heloisa', '123456', 'ALUNO'),
-  ('marcos@aluno.uel.br', 'Marcos', '123456', 'ALUNO'),
-  ('joao@aluno.uel.br', 'Joao', '123456', 'ALUNO'),
-  ('mateus@aluno.uel.br', 'Mateus', '123456', 'ALUNO'),
-  ('felipe@aluno.uel.br', 'Felipe', '123456', 'ALUNO'),
-  ('breno@aluno.uel.br', 'Breno', '123456', 'ALUNO'),
-  ('beatriz@aluno.uel.br', 'Beatriz', '123456', 'ALUNO'),
-  ('davi@aluno.uel.br', 'Davi', '123456', 'ALUNO');
 
-INSERT INTO professor (email_usuario) VALUES ('anderson@uel.br'), ('andrielber@uel.br');
-INSERT INTO aluno (email_usuario) VALUES
-  ('pedro@aluno.uel.br'),
-  ('gustavo@aluno.uel.br'),
-  ('alef@aluno.uel.br'),
-  ('emilly@aluno.uel.br'),
-  ('renan@aluno.uel.br'),
-  ('kelissa@aluno.uel.br'),
-  ('kaua@aluno.uel.br'),
-  ('leonardo@aluno.uel.br'),
-  ('ruan@aluno.uel.br'),
-  ('gabriel@aluno.uel.br'),
-  ('heloisa@aluno.uel.br'),
-  ('marcos@aluno.uel.br'),
-  ('joao@aluno.uel.br'),
-  ('mateus@aluno.uel.br'),
-  ('felipe@aluno.uel.br'),
-  ('breno@aluno.uel.br'),
-  ('beatriz@aluno.uel.br'),
-  ('davi@aluno.uel.br');
+                                                   ('anderson@uel.br', 'Prof. Anderson', 'prof123', 'PROFESSOR'),
+                                                   ('andrielber@uel.br', 'Prof. Andrielber', 'prof123', 'PROFESSOR'),
 
-INSERT INTO materia (sigla, nome) VALUES ('MAT101', 'Aritmetica Basica'), ('MAT102', 'Fracoes e Porcentagem'), ('MAT103', 'Geometria e Expressoes');
+                                                   ('pedro@aluno.uel.br', 'Pedro', '123456', 'ALUNO'),
+                                                   ('gustavo@aluno.uel.br', 'Gustavo', '123456', 'ALUNO'),
+                                                   ('alef@aluno.uel.br', 'Alef', '123456', 'ALUNO'),
+                                                   ('emilly@aluno.uel.br', 'Emilly', '123456', 'ALUNO'),
+                                                   ('renan@aluno.uel.br', 'Renan', '123456', 'ALUNO'),
+                                                   ('kelissa@aluno.uel.br', 'Kelissa', '123456', 'ALUNO'),
+                                                   ('kaua@aluno.uel.br', 'Kaua', '123456', 'ALUNO'),
+                                                   ('leonardo@aluno.uel.br', 'Leonardo', '123456', 'ALUNO'),
+                                                   ('ruan@aluno.uel.br', 'Ruan', '123456', 'ALUNO'),
+                                                   ('gabriel@aluno.uel.br', 'Gabriel', '123456', 'ALUNO'),
+                                                   ('heloisa@aluno.uel.br', 'Heloisa', '123456', 'ALUNO'),
+                                                   ('marcos@aluno.uel.br', 'Marcos', '123456', 'ALUNO'),
+                                                   ('joao@aluno.uel.br', 'Joao', '123456', 'ALUNO'),
+                                                   ('mateus@aluno.uel.br', 'Mateus', '123456', 'ALUNO'),
+                                                   ('felipe@aluno.uel.br', 'Felipe', '123456', 'ALUNO'),
+                                                   ('breno@aluno.uel.br', 'Breno', '123456', 'ALUNO'),
+                                                   ('beatriz@aluno.uel.br', 'Beatriz', '123456', 'ALUNO'),
+                                                   ('davi@aluno.uel.br', 'Davi', '123456', 'ALUNO');
+
+INSERT INTO professor (email_usuario) VALUES
+                                          ('anderson@uel.br'),
+                                          ('andrielber@uel.br');
+
+INSERT INTO aluno (email_usuario)
+SELECT email
+FROM usuario
+WHERE tipo = 'ALUNO';
+
+
+-- ============================================================
+-- 3. MATERIAS
+-- A sigla tem no maximo 4 caracteres (VARCHAR(4) no schema).
+-- ============================================================
+
+INSERT INTO materia (sigla, nome) VALUES
+
+                                      ('M101', 'Aritmetica Basica'),
+                                      ('M102', 'Fracoes e Porcentagem'),
+                                      ('M103', 'Geometria e Expressoes');
+
+
+-- ============================================================
+-- 4. PROFESSORES E MATERIAS
+-- A tabela possui aceita somente professores.
+-- ============================================================
+
 INSERT INTO possui (email_usuario, sigla_materia) VALUES
-  ('anderson@uel.br', 'MAT101'),
-  ('anderson@uel.br', 'MAT102'),
-  ('andrielber@uel.br', 'MAT102'),
-  ('andrielber@uel.br', 'MAT103'),
-  ('pedro@aluno.uel.br', 'MAT101'),
-  ('pedro@aluno.uel.br', 'MAT103'),
-  ('pedro@aluno.uel.br', 'MAT102'),
-  ('gustavo@aluno.uel.br', 'MAT101'),
-  ('gustavo@aluno.uel.br', 'MAT103'),
-  ('gustavo@aluno.uel.br', 'MAT102'),
-  ('alef@aluno.uel.br', 'MAT101'),
-  ('alef@aluno.uel.br', 'MAT103'),
-  ('alef@aluno.uel.br', 'MAT102'),
-  ('emilly@aluno.uel.br', 'MAT101'),
-  ('emilly@aluno.uel.br', 'MAT103'),
-  ('renan@aluno.uel.br', 'MAT101'),
-  ('renan@aluno.uel.br', 'MAT103'),
-  ('renan@aluno.uel.br', 'MAT102'),
-  ('kelissa@aluno.uel.br', 'MAT101'),
-  ('kelissa@aluno.uel.br', 'MAT103'),
-  ('kelissa@aluno.uel.br', 'MAT102'),
-  ('kaua@aluno.uel.br', 'MAT101'),
-  ('kaua@aluno.uel.br', 'MAT103'),
-  ('kaua@aluno.uel.br', 'MAT102'),
-  ('leonardo@aluno.uel.br', 'MAT101'),
-  ('leonardo@aluno.uel.br', 'MAT103'),
-  ('leonardo@aluno.uel.br', 'MAT102'),
-  ('ruan@aluno.uel.br', 'MAT101'),
-  ('ruan@aluno.uel.br', 'MAT103'),
-  ('ruan@aluno.uel.br', 'MAT102'),
-  ('gabriel@aluno.uel.br', 'MAT101'),
-  ('gabriel@aluno.uel.br', 'MAT103'),
-  ('heloisa@aluno.uel.br', 'MAT101'),
-  ('heloisa@aluno.uel.br', 'MAT103'),
-  ('heloisa@aluno.uel.br', 'MAT102'),
-  ('marcos@aluno.uel.br', 'MAT101'),
-  ('marcos@aluno.uel.br', 'MAT103'),
-  ('marcos@aluno.uel.br', 'MAT102'),
-  ('joao@aluno.uel.br', 'MAT101'),
-  ('joao@aluno.uel.br', 'MAT103'),
-  ('joao@aluno.uel.br', 'MAT102'),
-  ('mateus@aluno.uel.br', 'MAT101'),
-  ('mateus@aluno.uel.br', 'MAT103'),
-  ('mateus@aluno.uel.br', 'MAT102'),
-  ('felipe@aluno.uel.br', 'MAT101'),
-  ('felipe@aluno.uel.br', 'MAT103'),
-  ('felipe@aluno.uel.br', 'MAT102'),
-  ('breno@aluno.uel.br', 'MAT101'),
-  ('breno@aluno.uel.br', 'MAT103'),
-  ('beatriz@aluno.uel.br', 'MAT101'),
-  ('beatriz@aluno.uel.br', 'MAT103'),
-  ('beatriz@aluno.uel.br', 'MAT102'),
-  ('davi@aluno.uel.br', 'MAT101'),
-  ('davi@aluno.uel.br', 'MAT103'),
-  ('davi@aluno.uel.br', 'MAT102');
 
-INSERT INTO questao (id_questao, enunciado, tipo) VALUES
-  (1, 'Quanto é 345 + 278?', 'OBJETIVA'),
-  (2, 'Quanto é 1000 − 357?', 'OBJETIVA'),
-  (3, 'Quanto é 48 + 97 − 35?', 'OBJETIVA'),
-  (4, 'Quanto é 5 − 8?', 'OBJETIVA'),
-  (5, 'Quanto é 7 × 8?', 'OBJETIVA'),
-  (6, 'Quanto é 12 × 15?', 'OBJETIVA'),
-  (7, 'Quanto é 144 ÷ 12?', 'OBJETIVA'),
-  (8, 'Quanto é 156 ÷ 4?', 'OBJETIVA'),
-  (9, 'Quanto é 1/2 + 1/4?', 'OBJETIVA'),
-  (10, 'Quanto é 2/3 de 12?', 'OBJETIVA'),
-  (11, 'Quanto é 0,5 + 0,25?', 'OBJETIVA'),
-  (12, 'A fração 3/5 escrita em número decimal é:', 'OBJETIVA'),
-  (13, 'Quanto é 1,2 × 3?', 'OBJETIVA'),
-  (14, 'Quanto é 10% de 250?', 'OBJETIVA'),
-  (15, 'Quanto é 50% de 80?', 'OBJETIVA'),
-  (16, 'Quanto é 25% de 200?', 'OBJETIVA'),
-  (17, 'Se 3 canetas custam R$ 12, quanto custam 5 canetas?', 'OBJETIVA'),
-  (18, 'Um produto de R$ 150 tem 20% de desconto. Quanto se paga?', 'OBJETIVA'),
-  (19, 'Qual a área de um retângulo de lados 6 e 4?', 'OBJETIVA'),
-  (20, 'Qual o perímetro de um quadrado de lado 5?', 'OBJETIVA'),
-  (21, 'Quanto é 2 + 3 × 4?', 'OBJETIVA'),
-  (22, 'Quanto é (2 + 3) × 4?', 'OBJETIVA'),
-  (23, 'Quanto é 2 elevado a 3 (2³)?', 'OBJETIVA'),
-  (24, 'Qual a raiz quadrada de 81?', 'OBJETIVA'),
-  (25, 'Explique como resolver 3/4 + 1/8, mostrando os passos.', 'SUBJETIVA'),
-  (26, 'Por que não é possível dividir um número por zero?', 'SUBJETIVA'),
-  (27, 'Explique a diferença entre área e perímetro, com um exemplo.', 'SUBJETIVA'),
-  (28, 'Como calcular 15% de 200? Mostre o raciocínio.', 'SUBJETIVA'),
-  (29, 'Explique a ordem de resolução das operações numa expressão.', 'SUBJETIVA'),
-  (30, 'Resolva 2,5 × 4 e explique como chegou ao resultado.', 'SUBJETIVA'),
-  (31, 'O que é um número primo? Dê três exemplos.', 'SUBJETIVA'),
-  (32, 'Explique a regra de três simples com um exemplo.', 'SUBJETIVA');
+                                                      ('anderson@uel.br', 'M101'),
+                                                      ('anderson@uel.br', 'M102'),
 
-INSERT INTO questao_objetiva (id_questao) VALUES (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24);
+                                                      ('andrielber@uel.br', 'M102'),
+                                                      ('andrielber@uel.br', 'M103');
+
+
+-- ============================================================
+-- 5. QUESTOES
+-- IDs explicitos exigem OVERRIDING SYSTEM VALUE.
+-- ============================================================
+
+INSERT INTO questao
+(id_questao, enunciado, tipo)
+    OVERRIDING SYSTEM VALUE
+VALUES
+
+    (1, 'Quanto é 345 + 278?', 'OBJETIVA'),
+    (2, 'Quanto é 1000 - 357?', 'OBJETIVA'),
+    (3, 'Quanto é 48 + 97 - 35?', 'OBJETIVA'),
+    (4, 'Quanto é 5 - 8?', 'OBJETIVA'),
+    (5, 'Quanto é 7 x 8?', 'OBJETIVA'),
+    (6, 'Quanto é 12 x 15?', 'OBJETIVA'),
+    (7, 'Quanto é 144 / 12?', 'OBJETIVA'),
+    (8, 'Quanto é 156 / 4?', 'OBJETIVA'),
+    (9, 'Quanto é 1/2 + 1/4?', 'OBJETIVA'),
+    (10, 'Quanto é 2/3 de 12?', 'OBJETIVA'),
+    (11, 'Quanto é 0,5 + 0,25?', 'OBJETIVA'),
+    (12, 'A fração 3/5 em decimal é:', 'OBJETIVA'),
+    (13, 'Quanto é 1,2 x 3?', 'OBJETIVA'),
+    (14, 'Quanto é 10% de 250?', 'OBJETIVA'),
+    (15, 'Quanto é 50% de 80?', 'OBJETIVA'),
+    (16, 'Quanto é 25% de 200?', 'OBJETIVA'),
+    (17, 'Se 3 canetas custam R$ 12, quanto custam 5?', 'OBJETIVA'),
+    (18, 'Um produto de R$ 150 tem 20% de desconto. Quanto se paga?', 'OBJETIVA'),
+    (19, 'Qual a area de um retangulo de lados 6 e 4?', 'OBJETIVA'),
+    (20, 'Qual o perimetro de um quadrado de lado 5?', 'OBJETIVA'),
+    (21, 'Quanto é 2 + 3 x 4?', 'OBJETIVA'),
+    (22, 'Quanto é (2 + 3) x 4?', 'OBJETIVA'),
+    (23, 'Quanto é 2 elevado a 3?', 'OBJETIVA'),
+    (24, 'Qual a raiz quadrada de 81?', 'OBJETIVA'),
+
+    (25, 'Explique como resolver 3/4 + 1/8, mostrando os passos.', 'SUBJETIVA'),
+    (26, 'Por que nao é possivel dividir um numero por zero?', 'SUBJETIVA'),
+    (27, 'Explique a diferenca entre area e perimetro, com exemplo.', 'SUBJETIVA'),
+    (28, 'Como calcular 15% de 200? Mostre o raciocinio.', 'SUBJETIVA'),
+    (29, 'Explique a ordem de resolucao das operacoes.', 'SUBJETIVA'),
+    (30, 'Resolva 2,5 x 4 e explique como chegou ao resultado.', 'SUBJETIVA'),
+    (31, 'O que é um numero primo? De tres exemplos.', 'SUBJETIVA'),
+    (32, 'Explique a regra de tres simples com um exemplo.', 'SUBJETIVA');
+
+
+-- ============================================================
+-- 6. TIPOS DAS QUESTOES
+-- ============================================================
+
+INSERT INTO questao_objetiva (id_questao)
+SELECT id_questao
+FROM questao
+WHERE tipo = 'OBJETIVA';
+
 INSERT INTO questao_subjetiva (id_questao, expectativa) VALUES
-  (25, 'Igualar denominadores (3/4 = 6/8) e somar: 6/8 + 1/8 = 7/8.'),
-  (26, 'Não existe número que multiplicado por zero dê o dividendo; a divisão é indefinida.'),
-  (27, 'Perímetro é a soma dos lados; área mede a superfície. Ex.: retângulo 3x2 tem perímetro 10 e área 6.'),
-  (28, '15/100 x 200 = 30 (ou 10% = 20, 5% = 10, total 30).'),
-  (29, 'Parênteses, potências e raízes, multiplicação e divisão, depois soma e subtração.'),
-  (30, '2,5 x 4 = 10 (4 x 2 = 8 e 4 x 0,5 = 2).'),
-  (31, 'Número natural maior que 1 com apenas dois divisores: 1 e ele mesmo. Ex.: 2, 3, 5.'),
-  (32, 'Relaciona duas grandezas proporcionais. Ex.: 3 canetas = R$ 12, então 5 canetas = R$ 20.');
 
-INSERT INTO alternativa (id_alternativa, id_questao_objetiva, texto, correta) VALUES
-  (1, 1, '613', FALSE),
-  (2, 1, '623', TRUE),
-  (3, 1, '633', FALSE),
-  (4, 1, '723', FALSE),
-  (5, 2, '653', FALSE),
-  (6, 2, '633', FALSE),
-  (7, 2, '643', TRUE),
-  (8, 2, '743', FALSE),
-  (9, 3, '100', FALSE),
-  (10, 3, '110', TRUE),
-  (11, 3, '120', FALSE),
-  (12, 3, '130', FALSE),
-  (13, 4, '3', FALSE),
-  (14, 4, '−13', FALSE),
-  (15, 4, '13', FALSE),
-  (16, 4, '−3', TRUE),
-  (17, 5, '54', FALSE),
-  (18, 5, '56', TRUE),
-  (19, 5, '58', FALSE),
-  (20, 5, '64', FALSE),
-  (21, 6, '170', FALSE),
-  (22, 6, '190', FALSE),
-  (23, 6, '180', TRUE),
-  (24, 6, '160', FALSE),
-  (25, 7, '11', FALSE),
-  (26, 7, '12', TRUE),
-  (27, 7, '13', FALSE),
-  (28, 7, '14', FALSE),
-  (29, 8, '38', FALSE),
-  (30, 8, '42', FALSE),
-  (31, 8, '39', TRUE),
-  (32, 8, '44', FALSE),
-  (33, 9, '2/6', FALSE),
-  (34, 9, '3/4', TRUE),
-  (35, 9, '1/6', FALSE),
-  (36, 9, '2/4', FALSE),
-  (37, 10, '6', FALSE),
-  (38, 10, '9', FALSE),
-  (39, 10, '8', TRUE),
-  (40, 10, '10', FALSE),
-  (41, 11, '0,75', TRUE),
-  (42, 11, '0,30', FALSE),
-  (43, 11, '0,55', FALSE),
-  (44, 11, '0,80', FALSE),
-  (45, 12, '0,35', FALSE),
-  (46, 12, '0,53', FALSE),
-  (47, 12, '0,6', TRUE),
-  (48, 12, '0,8', FALSE),
-  (49, 13, '3,6', TRUE),
-  (50, 13, '4,2', FALSE),
-  (51, 13, '3,2', FALSE),
-  (52, 13, '36', FALSE),
-  (53, 14, '2,5', FALSE),
-  (54, 14, '25', TRUE),
-  (55, 14, '20', FALSE),
-  (56, 14, '15', FALSE),
-  (57, 15, '50', FALSE),
-  (58, 15, '30', FALSE),
-  (59, 15, '60', FALSE),
-  (60, 15, '40', TRUE),
-  (61, 16, '50', TRUE),
-  (62, 16, '25', FALSE),
-  (63, 16, '40', FALSE),
-  (64, 16, '75', FALSE),
-  (65, 17, 'R$ 15', FALSE),
-  (66, 17, 'R$ 18', FALSE),
-  (67, 17, 'R$ 20', TRUE),
-  (68, 17, 'R$ 24', FALSE),
-  (69, 18, 'R$ 130', FALSE),
-  (70, 18, 'R$ 120', TRUE),
-  (71, 18, 'R$ 135', FALSE),
-  (72, 18, 'R$ 110', FALSE),
-  (73, 19, '10', FALSE),
-  (74, 19, '20', FALSE),
-  (75, 19, '24', TRUE),
-  (76, 19, '48', FALSE),
-  (77, 20, '10', FALSE),
-  (78, 20, '25', FALSE),
-  (79, 20, '15', FALSE),
-  (80, 20, '20', TRUE),
-  (81, 21, '14', TRUE),
-  (82, 21, '20', FALSE),
-  (83, 21, '24', FALSE),
-  (84, 21, '12', FALSE),
-  (85, 22, '14', FALSE),
-  (86, 22, '20', TRUE),
-  (87, 22, '24', FALSE),
-  (88, 22, '12', FALSE),
-  (89, 23, '6', FALSE),
-  (90, 23, '8', TRUE),
-  (91, 23, '9', FALSE),
-  (92, 23, '5', FALSE),
-  (93, 24, '8', FALSE),
-  (94, 24, '7', FALSE),
-  (95, 24, '9', TRUE),
-  (96, 24, '10', FALSE);
-
-INSERT INTO avaliacao (id_avaliacao, titulo, descricao, data, horario_inicio, horario_fim, email_professor, sigla_materia) VALUES
-  (1, 'Quiz 1 - Adicao e Subtracao', 'Quiz de adição, subtração e expressões simples', '2026-08-28', '19:15', '20:00', 'anderson@uel.br', 'MAT101'),
-  (2, 'Prova 1 - Multiplicacao e Divisao', 'Prova de multiplicação, divisão e problemas', '2026-09-25', '19:15', '21:00', 'anderson@uel.br', 'MAT101'),
-  (3, 'Simulado - Fracoes e Decimais', 'Simulado de frações e números decimais', '2026-10-09', '19:15', '20:30', 'andrielber@uel.br', 'MAT102'),
-  (4, 'Quiz 2 - Porcentagem e Proporcao', 'Quiz de porcentagem e regra de três', '2026-10-23', '19:15', '20:00', 'anderson@uel.br', 'MAT102'),
-  (5, 'Prova 2 - Geometria e Expressoes', 'Prova de geometria básica, potências e expressões', '2026-11-13', '19:15', '21:00', 'andrielber@uel.br', 'MAT103'),
-  (6, 'Prova 3 - Revisao Geral', 'Revisão geral de matemática básica (ainda não aplicada)', '2026-11-27', '19:15', '21:00', 'andrielber@uel.br', 'MAT103');
-
-INSERT INTO avaliacao_questao (id_avaliacao, id_questao, valor_questao) VALUES
-  (1, 1, 2),
-  (1, 2, 2),
-  (1, 3, 2),
-  (1, 4, 2),
-  (1, 21, 2),
-  (2, 5, 1.5),
-  (2, 6, 1.5),
-  (2, 7, 1.5),
-  (2, 8, 1.5),
-  (2, 30, 4),
-  (3, 9, 1.5),
-  (3, 10, 1.5),
-  (3, 11, 1.5),
-  (3, 12, 1.5),
-  (3, 13, 1.5),
-  (3, 25, 2.5),
-  (4, 14, 1.5),
-  (4, 15, 1.5),
-  (4, 16, 1.5),
-  (4, 17, 1.5),
-  (4, 18, 1.5),
-  (4, 28, 2.5),
-  (5, 19, 1),
-  (5, 20, 1),
-  (5, 22, 1),
-  (5, 23, 1),
-  (5, 24, 1),
-  (5, 27, 3),
-  (5, 29, 2),
-  (6, 5, 2),
-  (6, 10, 2),
-  (6, 15, 2),
-  (6, 21, 2),
-  (6, 32, 2);
-
-INSERT INTO realiza (id_avaliacao, email_aluno) VALUES
-  (1, 'pedro@aluno.uel.br'),
-  (1, 'gustavo@aluno.uel.br'),
-  (1, 'alef@aluno.uel.br'),
-  (1, 'emilly@aluno.uel.br'),
-  (1, 'renan@aluno.uel.br'),
-  (1, 'kelissa@aluno.uel.br'),
-  (1, 'kaua@aluno.uel.br'),
-  (1, 'leonardo@aluno.uel.br'),
-  (1, 'ruan@aluno.uel.br'),
-  (1, 'gabriel@aluno.uel.br'),
-  (1, 'heloisa@aluno.uel.br'),
-  (1, 'marcos@aluno.uel.br'),
-  (1, 'joao@aluno.uel.br'),
-  (1, 'mateus@aluno.uel.br'),
-  (1, 'felipe@aluno.uel.br'),
-  (1, 'breno@aluno.uel.br'),
-  (1, 'beatriz@aluno.uel.br'),
-  (1, 'davi@aluno.uel.br'),
-  (2, 'pedro@aluno.uel.br'),
-  (2, 'gustavo@aluno.uel.br'),
-  (2, 'alef@aluno.uel.br'),
-  (2, 'emilly@aluno.uel.br'),
-  (2, 'renan@aluno.uel.br'),
-  (2, 'kelissa@aluno.uel.br'),
-  (2, 'kaua@aluno.uel.br'),
-  (2, 'leonardo@aluno.uel.br'),
-  (2, 'ruan@aluno.uel.br'),
-  (2, 'gabriel@aluno.uel.br'),
-  (2, 'heloisa@aluno.uel.br'),
-  (2, 'marcos@aluno.uel.br'),
-  (2, 'joao@aluno.uel.br'),
-  (2, 'mateus@aluno.uel.br'),
-  (2, 'felipe@aluno.uel.br'),
-  (2, 'breno@aluno.uel.br'),
-  (2, 'beatriz@aluno.uel.br'),
-  (2, 'davi@aluno.uel.br'),
-  (3, 'pedro@aluno.uel.br'),
-  (3, 'gustavo@aluno.uel.br'),
-  (3, 'alef@aluno.uel.br'),
-  (3, 'renan@aluno.uel.br'),
-  (3, 'kelissa@aluno.uel.br'),
-  (3, 'kaua@aluno.uel.br'),
-  (3, 'leonardo@aluno.uel.br'),
-  (3, 'ruan@aluno.uel.br'),
-  (3, 'heloisa@aluno.uel.br'),
-  (3, 'marcos@aluno.uel.br'),
-  (3, 'joao@aluno.uel.br'),
-  (3, 'mateus@aluno.uel.br'),
-  (3, 'felipe@aluno.uel.br'),
-  (3, 'beatriz@aluno.uel.br'),
-  (3, 'davi@aluno.uel.br'),
-  (4, 'pedro@aluno.uel.br'),
-  (4, 'gustavo@aluno.uel.br'),
-  (4, 'alef@aluno.uel.br'),
-  (4, 'renan@aluno.uel.br'),
-  (4, 'kelissa@aluno.uel.br'),
-  (4, 'kaua@aluno.uel.br'),
-  (4, 'leonardo@aluno.uel.br'),
-  (4, 'ruan@aluno.uel.br'),
-  (4, 'heloisa@aluno.uel.br'),
-  (4, 'marcos@aluno.uel.br'),
-  (4, 'joao@aluno.uel.br'),
-  (4, 'mateus@aluno.uel.br'),
-  (4, 'felipe@aluno.uel.br'),
-  (4, 'beatriz@aluno.uel.br'),
-  (4, 'davi@aluno.uel.br'),
-  (5, 'pedro@aluno.uel.br'),
-  (5, 'gustavo@aluno.uel.br'),
-  (5, 'alef@aluno.uel.br'),
-  (5, 'emilly@aluno.uel.br'),
-  (5, 'renan@aluno.uel.br'),
-  (5, 'kelissa@aluno.uel.br'),
-  (5, 'kaua@aluno.uel.br'),
-  (5, 'leonardo@aluno.uel.br'),
-  (5, 'ruan@aluno.uel.br'),
-  (5, 'gabriel@aluno.uel.br'),
-  (5, 'heloisa@aluno.uel.br'),
-  (5, 'marcos@aluno.uel.br'),
-  (5, 'joao@aluno.uel.br'),
-  (5, 'mateus@aluno.uel.br'),
-  (5, 'felipe@aluno.uel.br'),
-  (5, 'breno@aluno.uel.br'),
-  (5, 'beatriz@aluno.uel.br'),
-  (5, 'davi@aluno.uel.br'),
-  (6, 'pedro@aluno.uel.br'),
-  (6, 'gustavo@aluno.uel.br'),
-  (6, 'alef@aluno.uel.br'),
-  (6, 'emilly@aluno.uel.br'),
-  (6, 'renan@aluno.uel.br'),
-  (6, 'kelissa@aluno.uel.br'),
-  (6, 'kaua@aluno.uel.br'),
-  (6, 'leonardo@aluno.uel.br'),
-  (6, 'ruan@aluno.uel.br'),
-  (6, 'gabriel@aluno.uel.br'),
-  (6, 'heloisa@aluno.uel.br'),
-  (6, 'marcos@aluno.uel.br'),
-  (6, 'joao@aluno.uel.br'),
-  (6, 'mateus@aluno.uel.br'),
-  (6, 'felipe@aluno.uel.br'),
-  (6, 'breno@aluno.uel.br'),
-  (6, 'beatriz@aluno.uel.br'),
-  (6, 'davi@aluno.uel.br');
-
--- 438 respostas
-INSERT INTO responde (id_avaliacao, email_aluno, id_questao, resposta, nota) VALUES
-  (1, 'pedro@aluno.uel.br', 1, '623', 2),
-  (1, 'pedro@aluno.uel.br', 2, '643', 2),
-  (1, 'pedro@aluno.uel.br', 3, '110', 2),
-  (1, 'pedro@aluno.uel.br', 4, '−13', 0),
-  (1, 'pedro@aluno.uel.br', 21, '14', 2),
-  (1, 'gustavo@aluno.uel.br', 1, '623', 2),
-  (1, 'gustavo@aluno.uel.br', 2, '643', 2),
-  (1, 'gustavo@aluno.uel.br', 3, '130', 0),
-  (1, 'gustavo@aluno.uel.br', 4, '−3', 2),
-  (1, 'gustavo@aluno.uel.br', 21, '14', 2),
-  (1, 'alef@aluno.uel.br', 1, '623', 2),
-  (1, 'alef@aluno.uel.br', 2, '643', 2),
-  (1, 'alef@aluno.uel.br', 3, '110', 2),
-  (1, 'alef@aluno.uel.br', 4, '−13', 0),
-  (1, 'alef@aluno.uel.br', 21, '24', 0),
-  (1, 'emilly@aluno.uel.br', 1, '723', 0),
-  (1, 'emilly@aluno.uel.br', 2, '643', 2),
-  (1, 'emilly@aluno.uel.br', 3, '110', 2),
-  (1, 'emilly@aluno.uel.br', 4, '13', 0),
-  (1, 'emilly@aluno.uel.br', 21, '14', 2),
-  (1, 'renan@aluno.uel.br', 1, '623', 2),
-  (1, 'renan@aluno.uel.br', 2, '743', 0),
-  (1, 'renan@aluno.uel.br', 3, '130', 0),
-  (1, 'renan@aluno.uel.br', 4, '13', 0),
-  (1, 'renan@aluno.uel.br', 21, '24', 0),
-  (1, 'kelissa@aluno.uel.br', 1, '723', 0),
-  (1, 'kelissa@aluno.uel.br', 2, '633', 0),
-  (1, 'kelissa@aluno.uel.br', 3, '100', 0),
-  (1, 'kelissa@aluno.uel.br', 4, '13', 0),
-  (1, 'kelissa@aluno.uel.br', 21, '24', 0),
-  (1, 'kaua@aluno.uel.br', 1, '623', 2),
-  (1, 'kaua@aluno.uel.br', 2, '643', 2),
-  (1, 'kaua@aluno.uel.br', 3, '110', 2),
-  (1, 'kaua@aluno.uel.br', 4, '3', 0),
-  (1, 'kaua@aluno.uel.br', 21, '14', 2),
-  (1, 'leonardo@aluno.uel.br', 1, '623', 2),
-  (1, 'leonardo@aluno.uel.br', 2, '743', 0),
-  (1, 'leonardo@aluno.uel.br', 3, '100', 0),
-  (1, 'leonardo@aluno.uel.br', 4, '−13', 0),
-  (1, 'leonardo@aluno.uel.br', 21, '24', 0),
-  (1, 'ruan@aluno.uel.br', 1, '623', 2),
-  (1, 'ruan@aluno.uel.br', 2, '643', 2),
-  (1, 'ruan@aluno.uel.br', 3, '110', 2),
-  (1, 'ruan@aluno.uel.br', 4, '−3', 2),
-  (1, 'ruan@aluno.uel.br', 21, '20', 0),
-  (1, 'gabriel@aluno.uel.br', 1, '623', 2),
-  (1, 'gabriel@aluno.uel.br', 2, '743', 0),
-  (1, 'gabriel@aluno.uel.br', 3, '110', 2),
-  (1, 'gabriel@aluno.uel.br', 21, '24', 0),
-  (1, 'heloisa@aluno.uel.br', 1, '723', 0),
-  (1, 'heloisa@aluno.uel.br', 2, '643', 2),
-  (1, 'heloisa@aluno.uel.br', 3, '130', 0),
-  (1, 'heloisa@aluno.uel.br', 4, '−3', 2),
-  (1, 'heloisa@aluno.uel.br', 21, '14', 2),
-  (1, 'marcos@aluno.uel.br', 1, '623', 2),
-  (1, 'marcos@aluno.uel.br', 2, '643', 2),
-  (1, 'marcos@aluno.uel.br', 3, '120', 0),
-  (1, 'marcos@aluno.uel.br', 21, '20', 0),
-  (1, 'joao@aluno.uel.br', 1, '623', 2),
-  (1, 'joao@aluno.uel.br', 2, '653', 0),
-  (1, 'joao@aluno.uel.br', 3, '110', 2),
-  (1, 'joao@aluno.uel.br', 4, '−3', 2),
-  (1, 'joao@aluno.uel.br', 21, '12', 0),
-  (1, 'mateus@aluno.uel.br', 1, '623', 2),
-  (1, 'mateus@aluno.uel.br', 2, '643', 2),
-  (1, 'mateus@aluno.uel.br', 3, '110', 2),
-  (1, 'mateus@aluno.uel.br', 4, '13', 0),
-  (1, 'mateus@aluno.uel.br', 21, '14', 2),
-  (1, 'felipe@aluno.uel.br', 1, '623', 2),
-  (1, 'felipe@aluno.uel.br', 2, '633', 0),
-  (1, 'felipe@aluno.uel.br', 3, '120', 0),
-  (1, 'felipe@aluno.uel.br', 4, '3', 0),
-  (1, 'felipe@aluno.uel.br', 21, '14', 2),
-  (1, 'breno@aluno.uel.br', 1, '613', 0),
-  (1, 'breno@aluno.uel.br', 2, '633', 0),
-  (1, 'breno@aluno.uel.br', 3, '110', 2),
-  (1, 'breno@aluno.uel.br', 4, '−3', 2),
-  (1, 'breno@aluno.uel.br', 21, '14', 2),
-  (1, 'beatriz@aluno.uel.br', 1, '633', 0),
-  (1, 'beatriz@aluno.uel.br', 2, '643', 2),
-  (1, 'beatriz@aluno.uel.br', 3, '110', 2),
-  (1, 'beatriz@aluno.uel.br', 4, '−13', 0),
-  (1, 'beatriz@aluno.uel.br', 21, '20', 0),
-  (1, 'davi@aluno.uel.br', 2, '643', 2),
-  (1, 'davi@aluno.uel.br', 3, '110', 2),
-  (1, 'davi@aluno.uel.br', 4, '3', 0),
-  (1, 'davi@aluno.uel.br', 21, '14', 2),
-  (2, 'pedro@aluno.uel.br', 5, '56', 1.5),
-  (2, 'pedro@aluno.uel.br', 6, '180', 1.5),
-  (2, 'pedro@aluno.uel.br', 7, '12', 1.5),
-  (2, 'pedro@aluno.uel.br', 8, '39', 1.5),
-  (2, 'pedro@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'gustavo@aluno.uel.br', 5, '56', 1.5),
-  (2, 'gustavo@aluno.uel.br', 6, '180', 1.5),
-  (2, 'gustavo@aluno.uel.br', 7, '12', 1.5),
-  (2, 'gustavo@aluno.uel.br', 8, '44', 0),
-  (2, 'gustavo@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'alef@aluno.uel.br', 5, '56', 1.5),
-  (2, 'alef@aluno.uel.br', 6, '180', 1.5),
-  (2, 'alef@aluno.uel.br', 7, '12', 1.5),
-  (2, 'alef@aluno.uel.br', 8, '39', 1.5),
-  (2, 'alef@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'emilly@aluno.uel.br', 5, '54', 0),
-  (2, 'emilly@aluno.uel.br', 6, '180', 1.5),
-  (2, 'emilly@aluno.uel.br', 7, '12', 1.5),
-  (2, 'emilly@aluno.uel.br', 8, '42', 0),
-  (2, 'emilly@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'renan@aluno.uel.br', 5, '54', 0),
-  (2, 'renan@aluno.uel.br', 6, '180', 1.5),
-  (2, 'renan@aluno.uel.br', 7, '12', 1.5),
-  (2, 'renan@aluno.uel.br', 8, '44', 0),
-  (2, 'renan@aluno.uel.br', 30, 'Chegou perto do resultado, mas sem mostrar os passos.', 2.0),
-  (2, 'kaua@aluno.uel.br', 5, '56', 1.5),
-  (2, 'kaua@aluno.uel.br', 6, '170', 0),
-  (2, 'kaua@aluno.uel.br', 7, '12', 1.5),
-  (2, 'kaua@aluno.uel.br', 8, '42', 0),
-  (2, 'kaua@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'leonardo@aluno.uel.br', 5, '56', 1.5),
-  (2, 'leonardo@aluno.uel.br', 6, '180', 1.5),
-  (2, 'leonardo@aluno.uel.br', 7, '11', 0),
-  (2, 'leonardo@aluno.uel.br', 8, '38', 0),
-  (2, 'leonardo@aluno.uel.br', 30, 'Chegou perto do resultado, mas sem mostrar os passos.', 2.0),
-  (2, 'ruan@aluno.uel.br', 5, '56', 1.5),
-  (2, 'ruan@aluno.uel.br', 6, '190', 0),
-  (2, 'ruan@aluno.uel.br', 7, '12', 1.5),
-  (2, 'ruan@aluno.uel.br', 8, '39', 1.5),
-  (2, 'ruan@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'gabriel@aluno.uel.br', 5, '56', 1.5),
-  (2, 'gabriel@aluno.uel.br', 6, '180', 1.5),
-  (2, 'gabriel@aluno.uel.br', 7, '13', 0),
-  (2, 'gabriel@aluno.uel.br', 8, '38', 0),
-  (2, 'gabriel@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'heloisa@aluno.uel.br', 5, '56', 1.5),
-  (2, 'heloisa@aluno.uel.br', 6, '160', 0),
-  (2, 'heloisa@aluno.uel.br', 7, '12', 1.5),
-  (2, 'heloisa@aluno.uel.br', 8, '44', 0),
-  (2, 'heloisa@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'marcos@aluno.uel.br', 5, '56', 1.5),
-  (2, 'marcos@aluno.uel.br', 6, '160', 0),
-  (2, 'marcos@aluno.uel.br', 7, '12', 1.5),
-  (2, 'marcos@aluno.uel.br', 8, '39', 1.5),
-  (2, 'marcos@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'joao@aluno.uel.br', 5, '56', 1.5),
-  (2, 'joao@aluno.uel.br', 6, '170', 0),
-  (2, 'joao@aluno.uel.br', 7, '12', 1.5),
-  (2, 'joao@aluno.uel.br', 8, '39', 1.5),
-  (2, 'joao@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'felipe@aluno.uel.br', 5, '64', 0),
-  (2, 'felipe@aluno.uel.br', 6, '180', 1.5),
-  (2, 'felipe@aluno.uel.br', 7, '12', 1.5),
-  (2, 'felipe@aluno.uel.br', 8, '44', 0),
-  (2, 'felipe@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'breno@aluno.uel.br', 5, '56', 1.5),
-  (2, 'breno@aluno.uel.br', 6, '170', 0),
-  (2, 'breno@aluno.uel.br', 7, '12', 1.5),
-  (2, 'breno@aluno.uel.br', 8, '39', 1.5),
-  (2, 'breno@aluno.uel.br', 30, 'Resposta correta, com os passos do cálculo explicados.', 4.0),
-  (2, 'beatriz@aluno.uel.br', 5, '56', 1.5),
-  (2, 'beatriz@aluno.uel.br', 6, '160', 0),
-  (2, 'beatriz@aluno.uel.br', 7, '14', 0),
-  (2, 'beatriz@aluno.uel.br', 8, '39', 1.5),
-  (2, 'beatriz@aluno.uel.br', 30, 'Chegou perto do resultado, mas sem mostrar os passos.', 2.0),
-  (3, 'pedro@aluno.uel.br', 9, '2/4', 0),
-  (3, 'pedro@aluno.uel.br', 10, '8', 1.5),
-  (3, 'pedro@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'pedro@aluno.uel.br', 12, '0,35', 0),
-  (3, 'pedro@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'pedro@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'gustavo@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'gustavo@aluno.uel.br', 10, '10', 0),
-  (3, 'gustavo@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'gustavo@aluno.uel.br', 12, '0,6', 1.5),
-  (3, 'gustavo@aluno.uel.br', 13, '36', 0),
-  (3, 'gustavo@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'alef@aluno.uel.br', 9, '2/6', 0),
-  (3, 'alef@aluno.uel.br', 10, '8', 1.5),
-  (3, 'alef@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'alef@aluno.uel.br', 12, '0,53', 0),
-  (3, 'alef@aluno.uel.br', 13, '4,2', 0),
-  (3, 'alef@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'renan@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'renan@aluno.uel.br', 10, '8', 1.5),
-  (3, 'renan@aluno.uel.br', 11, '0,80', 0),
-  (3, 'renan@aluno.uel.br', 12, '0,53', 0),
-  (3, 'renan@aluno.uel.br', 13, '4,2', 0),
-  (3, 'renan@aluno.uel.br', 25, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.25),
-  (3, 'kelissa@aluno.uel.br', 9, '2/6', 0),
-  (3, 'kelissa@aluno.uel.br', 10, '9', 0),
-  (3, 'kelissa@aluno.uel.br', 11, '0,80', 0),
-  (3, 'kelissa@aluno.uel.br', 12, '0,6', 1.5),
-  (3, 'kelissa@aluno.uel.br', 13, '4,2', 0),
-  (3, 'kelissa@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'kaua@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'kaua@aluno.uel.br', 10, '8', 1.5),
-  (3, 'kaua@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'kaua@aluno.uel.br', 12, '0,53', 0),
-  (3, 'kaua@aluno.uel.br', 13, '3,2', 0),
-  (3, 'kaua@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'ruan@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'ruan@aluno.uel.br', 10, '8', 1.5),
-  (3, 'ruan@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'ruan@aluno.uel.br', 12, '0,6', 1.5),
-  (3, 'ruan@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'ruan@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'heloisa@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'heloisa@aluno.uel.br', 10, '8', 1.5),
-  (3, 'heloisa@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'heloisa@aluno.uel.br', 12, '0,8', 0),
-  (3, 'heloisa@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'heloisa@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'marcos@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'marcos@aluno.uel.br', 10, '8', 1.5),
-  (3, 'marcos@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'marcos@aluno.uel.br', 12, '0,53', 0),
-  (3, 'marcos@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'joao@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'joao@aluno.uel.br', 10, '9', 0),
-  (3, 'joao@aluno.uel.br', 12, '0,6', 1.5),
-  (3, 'joao@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'joao@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'mateus@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'mateus@aluno.uel.br', 10, '8', 1.5),
-  (3, 'mateus@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'mateus@aluno.uel.br', 12, '0,6', 1.5),
-  (3, 'mateus@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'mateus@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (3, 'felipe@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'felipe@aluno.uel.br', 10, '8', 1.5),
-  (3, 'felipe@aluno.uel.br', 11, '0,30', 0),
-  (3, 'felipe@aluno.uel.br', 12, '0,8', 0),
-  (3, 'felipe@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'felipe@aluno.uel.br', 25, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.25),
-  (3, 'beatriz@aluno.uel.br', 9, '3/4', 1.5),
-  (3, 'beatriz@aluno.uel.br', 10, '6', 0),
-  (3, 'beatriz@aluno.uel.br', 11, '0,55', 0),
-  (3, 'beatriz@aluno.uel.br', 12, '0,53', 0),
-  (3, 'beatriz@aluno.uel.br', 13, '3,2', 0),
-  (3, 'beatriz@aluno.uel.br', 25, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.25),
-  (3, 'davi@aluno.uel.br', 9, '2/4', 0),
-  (3, 'davi@aluno.uel.br', 10, '8', 1.5),
-  (3, 'davi@aluno.uel.br', 11, '0,75', 1.5),
-  (3, 'davi@aluno.uel.br', 12, '0,6', 1.5),
-  (3, 'davi@aluno.uel.br', 13, '3,6', 1.5),
-  (3, 'davi@aluno.uel.br', 25, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'pedro@aluno.uel.br', 14, '25', 1.5),
-  (4, 'pedro@aluno.uel.br', 15, '50', 0),
-  (4, 'pedro@aluno.uel.br', 16, '75', 0),
-  (4, 'pedro@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'pedro@aluno.uel.br', 18, 'R$ 120', 1.5),
-  (4, 'pedro@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'gustavo@aluno.uel.br', 14, '25', 1.5),
-  (4, 'gustavo@aluno.uel.br', 15, '40', 1.5),
-  (4, 'gustavo@aluno.uel.br', 16, '50', 1.5),
-  (4, 'gustavo@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'gustavo@aluno.uel.br', 18, 'R$ 135', 0),
-  (4, 'gustavo@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'alef@aluno.uel.br', 14, '25', 1.5),
-  (4, 'alef@aluno.uel.br', 15, '40', 1.5),
-  (4, 'alef@aluno.uel.br', 16, '50', 1.5),
-  (4, 'alef@aluno.uel.br', 17, 'R$ 24', 0),
-  (4, 'alef@aluno.uel.br', 18, 'R$ 130', 0),
-  (4, 'alef@aluno.uel.br', 28, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.25),
-  (4, 'renan@aluno.uel.br', 14, '25', 1.5),
-  (4, 'renan@aluno.uel.br', 15, '50', 0),
-  (4, 'renan@aluno.uel.br', 16, '50', 1.5),
-  (4, 'renan@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'renan@aluno.uel.br', 18, 'R$ 135', 0),
-  (4, 'renan@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'kelissa@aluno.uel.br', 14, '25', 1.5),
-  (4, 'kelissa@aluno.uel.br', 15, '40', 1.5),
-  (4, 'kelissa@aluno.uel.br', 16, '50', 1.5),
-  (4, 'kelissa@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'kelissa@aluno.uel.br', 18, 'R$ 130', 0),
-  (4, 'kelissa@aluno.uel.br', 28, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.25),
-  (4, 'kaua@aluno.uel.br', 14, '20', 0),
-  (4, 'kaua@aluno.uel.br', 15, '40', 1.5),
-  (4, 'kaua@aluno.uel.br', 16, '25', 0),
-  (4, 'kaua@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'kaua@aluno.uel.br', 18, 'R$ 120', 1.5),
-  (4, 'kaua@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'leonardo@aluno.uel.br', 14, '25', 1.5),
-  (4, 'leonardo@aluno.uel.br', 15, '40', 1.5),
-  (4, 'leonardo@aluno.uel.br', 16, '75', 0),
-  (4, 'leonardo@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'leonardo@aluno.uel.br', 18, 'R$ 110', 0),
-  (4, 'leonardo@aluno.uel.br', 28, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.25),
-  (4, 'ruan@aluno.uel.br', 14, '25', 1.5),
-  (4, 'ruan@aluno.uel.br', 15, '40', 1.5),
-  (4, 'ruan@aluno.uel.br', 16, '50', 1.5),
-  (4, 'ruan@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'ruan@aluno.uel.br', 18, 'R$ 120', 1.5),
-  (4, 'ruan@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'heloisa@aluno.uel.br', 14, '15', 0),
-  (4, 'heloisa@aluno.uel.br', 15, '40', 1.5),
-  (4, 'heloisa@aluno.uel.br', 16, '50', 1.5),
-  (4, 'heloisa@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'heloisa@aluno.uel.br', 18, 'R$ 120', 1.5),
-  (4, 'heloisa@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'joao@aluno.uel.br', 14, '25', 1.5),
-  (4, 'joao@aluno.uel.br', 15, '40', 1.5),
-  (4, 'joao@aluno.uel.br', 16, '50', 1.5),
-  (4, 'joao@aluno.uel.br', 17, 'R$ 24', 0),
-  (4, 'joao@aluno.uel.br', 18, 'R$ 120', 1.5),
-  (4, 'joao@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'mateus@aluno.uel.br', 14, '15', 0),
-  (4, 'mateus@aluno.uel.br', 15, '30', 0),
-  (4, 'mateus@aluno.uel.br', 16, '50', 1.5),
-  (4, 'mateus@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'mateus@aluno.uel.br', 18, 'R$ 120', 1.5),
-  (4, 'mateus@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (4, 'beatriz@aluno.uel.br', 14, '15', 0),
-  (4, 'beatriz@aluno.uel.br', 15, '50', 0),
-  (4, 'beatriz@aluno.uel.br', 16, '50', 1.5),
-  (4, 'beatriz@aluno.uel.br', 17, 'R$ 15', 0),
-  (4, 'beatriz@aluno.uel.br', 18, 'R$ 130', 0),
-  (4, 'beatriz@aluno.uel.br', 28, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.25),
-  (4, 'davi@aluno.uel.br', 14, '25', 1.5),
-  (4, 'davi@aluno.uel.br', 15, '40', 1.5),
-  (4, 'davi@aluno.uel.br', 16, '50', 1.5),
-  (4, 'davi@aluno.uel.br', 17, 'R$ 20', 1.5),
-  (4, 'davi@aluno.uel.br', 18, 'R$ 120', 1.5),
-  (4, 'davi@aluno.uel.br', 28, 'Resposta correta, com os passos do cálculo explicados.', 2.5),
-  (5, 'pedro@aluno.uel.br', 19, '24', 1),
-  (5, 'pedro@aluno.uel.br', 20, '20', 1),
-  (5, 'pedro@aluno.uel.br', 22, '20', 1),
-  (5, 'pedro@aluno.uel.br', 23, '8', 1),
-  (5, 'pedro@aluno.uel.br', 24, '9', 1),
-  (5, 'pedro@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', NULL),
-  (5, 'pedro@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', NULL),
-  (5, 'gustavo@aluno.uel.br', 19, '24', 1),
-  (5, 'gustavo@aluno.uel.br', 20, '15', 0),
-  (5, 'gustavo@aluno.uel.br', 22, '20', 1),
-  (5, 'gustavo@aluno.uel.br', 23, '6', 0),
-  (5, 'gustavo@aluno.uel.br', 24, '10', 0),
-  (5, 'gustavo@aluno.uel.br', 27, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.5),
-  (5, 'gustavo@aluno.uel.br', 29, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.0),
-  (5, 'alef@aluno.uel.br', 19, '20', 0),
-  (5, 'alef@aluno.uel.br', 20, '20', 1),
-  (5, 'alef@aluno.uel.br', 22, '14', 0),
-  (5, 'alef@aluno.uel.br', 23, '6', 0),
-  (5, 'alef@aluno.uel.br', 24, '8', 0),
-  (5, 'alef@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'alef@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'emilly@aluno.uel.br', 19, '24', 1),
-  (5, 'emilly@aluno.uel.br', 20, '15', 0),
-  (5, 'emilly@aluno.uel.br', 22, '12', 0),
-  (5, 'emilly@aluno.uel.br', 23, '6', 0),
-  (5, 'emilly@aluno.uel.br', 24, '8', 0),
-  (5, 'emilly@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'emilly@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'renan@aluno.uel.br', 19, '20', 0),
-  (5, 'renan@aluno.uel.br', 20, '20', 1),
-  (5, 'renan@aluno.uel.br', 22, '12', 0),
-  (5, 'renan@aluno.uel.br', 23, '6', 0),
-  (5, 'renan@aluno.uel.br', 24, '9', 1),
-  (5, 'renan@aluno.uel.br', 27, 'Chegou perto do resultado, mas sem mostrar os passos.', NULL),
-  (5, 'renan@aluno.uel.br', 29, 'Chegou perto do resultado, mas sem mostrar os passos.', NULL),
-  (5, 'kelissa@aluno.uel.br', 20, '20', 1),
-  (5, 'kelissa@aluno.uel.br', 22, '20', 1),
-  (5, 'kelissa@aluno.uel.br', 23, '5', 0),
-  (5, 'kelissa@aluno.uel.br', 24, '9', 1),
-  (5, 'kelissa@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'kelissa@aluno.uel.br', 29, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.0),
-  (5, 'kaua@aluno.uel.br', 19, '24', 1),
-  (5, 'kaua@aluno.uel.br', 20, '20', 1),
-  (5, 'kaua@aluno.uel.br', 22, '20', 1),
-  (5, 'kaua@aluno.uel.br', 23, '6', 0),
-  (5, 'kaua@aluno.uel.br', 24, '9', 1),
-  (5, 'kaua@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'leonardo@aluno.uel.br', 19, '20', 0),
-  (5, 'leonardo@aluno.uel.br', 20, '20', 1),
-  (5, 'leonardo@aluno.uel.br', 22, '14', 0),
-  (5, 'leonardo@aluno.uel.br', 23, '8', 1),
-  (5, 'leonardo@aluno.uel.br', 24, '9', 1),
-  (5, 'leonardo@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'leonardo@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'gabriel@aluno.uel.br', 19, '24', 1),
-  (5, 'gabriel@aluno.uel.br', 20, '20', 1),
-  (5, 'gabriel@aluno.uel.br', 22, '20', 1),
-  (5, 'gabriel@aluno.uel.br', 23, '5', 0),
-  (5, 'gabriel@aluno.uel.br', 24, '9', 1),
-  (5, 'gabriel@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'gabriel@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'heloisa@aluno.uel.br', 19, '24', 1),
-  (5, 'heloisa@aluno.uel.br', 22, '20', 1),
-  (5, 'heloisa@aluno.uel.br', 23, '8', 1),
-  (5, 'heloisa@aluno.uel.br', 24, '7', 0),
-  (5, 'heloisa@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'heloisa@aluno.uel.br', 29, 'Chegou perto do resultado, mas sem mostrar os passos.', 1.0),
-  (5, 'marcos@aluno.uel.br', 19, '24', 1),
-  (5, 'marcos@aluno.uel.br', 20, '20', 1),
-  (5, 'marcos@aluno.uel.br', 22, '20', 1),
-  (5, 'marcos@aluno.uel.br', 23, '9', 0),
-  (5, 'marcos@aluno.uel.br', 24, '9', 1),
-  (5, 'marcos@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'marcos@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'joao@aluno.uel.br', 19, '24', 1),
-  (5, 'joao@aluno.uel.br', 20, '20', 1),
-  (5, 'joao@aluno.uel.br', 22, '14', 0),
-  (5, 'joao@aluno.uel.br', 23, '8', 1),
-  (5, 'joao@aluno.uel.br', 24, '9', 1),
-  (5, 'joao@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', NULL),
-  (5, 'joao@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', NULL),
-  (5, 'mateus@aluno.uel.br', 19, '24', 1),
-  (5, 'mateus@aluno.uel.br', 20, '15', 0),
-  (5, 'mateus@aluno.uel.br', 22, '24', 0),
-  (5, 'mateus@aluno.uel.br', 23, '8', 1),
-  (5, 'mateus@aluno.uel.br', 24, '9', 1),
-  (5, 'mateus@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'mateus@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'felipe@aluno.uel.br', 19, '24', 1),
-  (5, 'felipe@aluno.uel.br', 20, '20', 1),
-  (5, 'felipe@aluno.uel.br', 22, '20', 1),
-  (5, 'felipe@aluno.uel.br', 23, '8', 1),
-  (5, 'felipe@aluno.uel.br', 24, '9', 1),
-  (5, 'felipe@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'felipe@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'breno@aluno.uel.br', 19, '24', 1),
-  (5, 'breno@aluno.uel.br', 20, '15', 0),
-  (5, 'breno@aluno.uel.br', 22, '24', 0),
-  (5, 'breno@aluno.uel.br', 23, '8', 1),
-  (5, 'breno@aluno.uel.br', 24, '9', 1),
-  (5, 'breno@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'breno@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0),
-  (5, 'beatriz@aluno.uel.br', 19, '24', 1),
-  (5, 'beatriz@aluno.uel.br', 20, '10', 0),
-  (5, 'beatriz@aluno.uel.br', 22, '20', 1),
-  (5, 'beatriz@aluno.uel.br', 23, '6', 0),
-  (5, 'beatriz@aluno.uel.br', 24, '9', 1),
-  (5, 'beatriz@aluno.uel.br', 27, 'Chegou perto do resultado, mas sem mostrar os passos.', NULL),
-  (5, 'beatriz@aluno.uel.br', 29, 'Chegou perto do resultado, mas sem mostrar os passos.', NULL),
-  (5, 'davi@aluno.uel.br', 19, '24', 1),
-  (5, 'davi@aluno.uel.br', 20, '15', 0),
-  (5, 'davi@aluno.uel.br', 22, '20', 1),
-  (5, 'davi@aluno.uel.br', 23, '8', 1),
-  (5, 'davi@aluno.uel.br', 24, '9', 1),
-  (5, 'davi@aluno.uel.br', 27, 'Resposta correta, com os passos do cálculo explicados.', 3.0),
-  (5, 'davi@aluno.uel.br', 29, 'Resposta correta, com os passos do cálculo explicados.', 2.0);
+                                                            (25, 'Igualar denominadores: 6/8 + 1/8 = 7/8.'),
+                                                            (26, 'A divisao por zero e indefinida.'),
+                                                            (27, 'Perimetro e a soma dos lados; area mede a superficie.'),
+                                                            (28, '15/100 x 200 = 30.'),
+                                                            (29, 'Parenteses, potencias, multiplicacao e divisao, soma e subtracao.'),
+                                                            (30, '2,5 x 4 = 10.'),
+                                                            (31, 'Numero natural maior que 1 com somente dois divisores.'),
+                                                            (32, 'Relaciona duas grandezas proporcionais.');
 
 
-SELECT setval(pg_get_serial_sequence('questao','id_questao'),      (SELECT MAX(id_questao)   FROM questao));
-SELECT setval(pg_get_serial_sequence('avaliacao','id_avaliacao'),  (SELECT MAX(id_avaliacao) FROM avaliacao));
-SELECT setval(pg_get_serial_sequence('alternativa','id_alternativa'), (SELECT MAX(id_alternativa) FROM alternativa));
+-- ============================================================
+-- 7. ALTERNATIVAS
+-- A primeira alternativa de cada questao e a correta.
+-- IDs sao gerados automaticamente.
+-- ============================================================
+
+INSERT INTO alternativa
+(id_questao_objetiva, texto, correta)
+
+SELECT
+    q.id,
+    op.texto,
+    op.posicao = 1
+
+FROM (
+         VALUES
+
+             (1, '623', '613', '633', '723'),
+             (2, '643', '653', '633', '743'),
+             (3, '110', '100', '120', '130'),
+             (4, '-3', '3', '-13', '13'),
+             (5, '56', '54', '58', '64'),
+             (6, '180', '170', '190', '160'),
+             (7, '12', '11', '13', '14'),
+             (8, '39', '38', '42', '44'),
+             (9, '3/4', '2/6', '1/6', '2/4'),
+             (10, '8', '6', '9', '10'),
+             (11, '0,75', '0,30', '0,55', '0,80'),
+             (12, '0,6', '0,35', '0,53', '0,8'),
+             (13, '3,6', '4,2', '3,2', '36'),
+             (14, '25', '2,5', '20', '15'),
+             (15, '40', '50', '30', '60'),
+             (16, '50', '25', '40', '75'),
+             (17, 'R$ 20', 'R$ 15', 'R$ 18', 'R$ 24'),
+             (18, 'R$ 120', 'R$ 130', 'R$ 135', 'R$ 110'),
+             (19, '24', '10', '20', '48'),
+             (20, '20', '10', '25', '15'),
+             (21, '14', '20', '24', '12'),
+             (22, '20', '14', '24', '12'),
+             (23, '8', '6', '9', '5'),
+             (24, '9', '8', '7', '10')
+
+     ) AS q(id, correta, errada1, errada2, errada3)
+
+         CROSS JOIN LATERAL (
+
+    VALUES
+        (1, q.correta),
+        (2, q.errada1),
+        (3, q.errada2),
+        (4, q.errada3)
+
+        ) AS op(posicao, texto);
+
+
+-- ============================================================
+-- 8. AVALIACOES
+-- ============================================================
+
+INSERT INTO avaliacao (
+    id_avaliacao,
+    titulo,
+    descricao,
+    data_avaliacao,
+    horario_inicio,
+    horario_fim,
+    email_professor,
+    sigla_materia
+)
+    OVERRIDING SYSTEM VALUE
+
+VALUES
+
+    (1, 'Quiz 1 - Adicao e Subtracao',
+     'Quiz de adicao, subtracao e expressoes simples',
+     '2026-08-28', '19:15', '20:00',
+     'anderson@uel.br', 'M101'),
+
+    (2, 'Prova 1 - Multiplicacao e Divisao',
+     'Prova de multiplicacao, divisao e problemas',
+     '2026-09-25', '19:15', '21:00',
+     'anderson@uel.br', 'M101'),
+
+    (3, 'Simulado - Fracoes e Decimais',
+     'Simulado de fracoes e numeros decimais',
+     '2026-10-09', '19:15', '20:30',
+     'andrielber@uel.br', 'M102'),
+
+    (4, 'Quiz 2 - Porcentagem e Proporcao',
+     'Quiz de porcentagem e regra de tres',
+     '2026-10-23', '19:15', '20:00',
+     'anderson@uel.br', 'M102'),
+
+    (5, 'Prova 2 - Geometria e Expressoes',
+     'Prova de geometria basica, potencias e expressoes',
+     '2026-11-13', '19:15', '21:00',
+     'andrielber@uel.br', 'M103'),
+
+    (6, 'Prova 3 - Revisao Geral',
+     'Avaliacao de demonstracao ainda nao respondida',
+     '2026-11-27', '19:15', '21:00',
+     'andrielber@uel.br', 'M103');
+
+
+-- ============================================================
+-- 9. QUESTOES E VALORES DE CADA AVALIACAO
+-- ============================================================
+
+INSERT INTO avaliacao_questao (
+    id_avaliacao,
+    id_questao,
+    valor_questao
+)
+VALUES
+
+-- Avaliacao 1
+(1, 1, 2),
+(1, 2, 2),
+(1, 3, 2),
+(1, 4, 2),
+(1, 21, 2),
+
+-- Avaliacao 2
+(2, 5, 1.5),
+(2, 6, 1.5),
+(2, 7, 1.5),
+(2, 8, 1.5),
+(2, 30, 4),
+
+-- Avaliacao 3
+(3, 9, 1.5),
+(3, 10, 1.5),
+(3, 11, 1.5),
+(3, 12, 1.5),
+(3, 13, 1.5),
+(3, 25, 2.5),
+
+-- Avaliacao 4
+(4, 14, 1.5),
+(4, 15, 1.5),
+(4, 16, 1.5),
+(4, 17, 1.5),
+(4, 18, 1.5),
+(4, 28, 2.5),
+
+-- Avaliacao 5
+(5, 19, 1),
+(5, 20, 1),
+(5, 22, 1),
+(5, 23, 1),
+(5, 24, 1),
+(5, 27, 3),
+(5, 29, 2),
+
+-- Avaliacao 6
+(6, 5, 2),
+(6, 10, 2),
+(6, 15, 2),
+(6, 21, 2),
+(6, 32, 2);
+
+
+-- ============================================================
+-- 10. ALUNOS DESIGNADOS
+--
+-- O schema nao possui associacao aluno-materia.
+-- Portanto, todos os alunos sao designados para as
+-- seis avaliacoes de demonstracao.
+-- ============================================================
+
+INSERT INTO realiza (
+    id_avaliacao,
+    email_aluno
+)
+
+SELECT
+    a.id_avaliacao,
+    al.email_usuario
+
+FROM avaliacao a
+
+         CROSS JOIN aluno al;
+
+
+-- ============================================================
+-- 11. RESPOSTAS AUTOMATICAS DE DEMONSTRACAO
+--
+-- Avaliacoes 1 a 5:
+-- Objetivas: alternativa selecionada e nota automatica.
+-- Subjetivas: resposta textual e algumas notas pendentes.
+--
+-- Avaliacao 6:
+-- Sem respostas, para demonstrar alunos que ainda
+-- nao realizaram a avaliacao.
+-- ============================================================
+
+INSERT INTO responde (
+    id_avaliacao,
+    email_usuario,
+    id_questao,
+    resposta_subjetiva,
+    id_alternativa_escolhida,
+    nota
+)
+
+SELECT
+
+    re.id_avaliacao,
+
+    re.email_aluno,
+
+    q.id_questao,
+
+    CASE
+        WHEN q.tipo = 'SUBJETIVA'
+            THEN
+            'Resposta demonstrativa do aluno. '
+                || 'O professor devera avaliar o raciocinio apresentado.'
+        ELSE NULL
+        END,
+
+    CASE
+        WHEN q.tipo = 'OBJETIVA'
+            THEN alt.id_alternativa
+        ELSE NULL
+        END,
+
+    CASE
+
+        WHEN q.tipo = 'OBJETIVA' THEN
+
+            CASE
+                WHEN alt.correta THEN aq.valor_questao
+                ELSE 0
+                END
+
+        WHEN MOD(
+                     ABS(
+                             HASHCODE.hash + q.id_questao + re.id_avaliacao
+                     ),
+                     3
+             ) = 0 THEN aq.valor_questao
+
+        ELSE NULL
+
+        END
+
+FROM realiza re
+
+         JOIN avaliacao_questao aq
+              ON aq.id_avaliacao = re.id_avaliacao
+
+         JOIN questao q
+              ON q.id_questao = aq.id_questao
+
+         CROSS JOIN LATERAL (
+    SELECT ABS(
+                   HASHTEXT(re.email_aluno)::BIGINT
+           ) AS hash
+        ) HASHCODE
+
+         LEFT JOIN LATERAL (
+
+    SELECT
+        a.id_alternativa,
+        a.correta
+
+    FROM alternativa a
+
+    WHERE a.id_questao_objetiva = q.id_questao
+
+    ORDER BY
+
+        CASE
+            WHEN MOD(
+                         ABS(HASHCODE.hash + q.id_questao + re.id_avaliacao),
+                         3
+                 ) = 0
+                THEN a.correta
+            ELSE NOT a.correta
+            END DESC,
+
+        a.id_alternativa
+
+        LIMIT 1
+
+) alt ON q.tipo = 'OBJETIVA'
+
+WHERE re.id_avaliacao BETWEEN 1 AND 5;
+
+
+-- ============================================================
+-- 12. CALCULAR NOTAS TOTAIS DOS ALUNOS
+--
+-- Se ainda existir questao discursiva sem correcao,
+-- a nota total permanece 0 ate a correcao completa.
+-- ============================================================
+
+UPDATE realiza re
+
+SET nota_total = (
+
+    SELECT COALESCE(SUM(r.nota), 0)
+
+    FROM responde r
+
+    WHERE r.id_avaliacao = re.id_avaliacao
+      AND r.email_usuario = re.email_aluno
+
+)
+
+WHERE re.id_avaliacao BETWEEN 1 AND 5
+
+  AND NOT EXISTS (
+
+    SELECT 1
+
+    FROM avaliacao_questao aq
+
+             JOIN questao_subjetiva qs
+                  ON qs.id_questao = aq.id_questao
+
+             LEFT JOIN responde r
+                       ON r.id_avaliacao = aq.id_avaliacao
+                           AND r.id_questao = aq.id_questao
+                           AND r.email_usuario = re.email_aluno
+
+    WHERE aq.id_avaliacao = re.id_avaliacao
+      AND r.nota IS NULL
+
+);
+
+
+-- ============================================================
+-- 13. SINCRONIZAR SEQUENCIAS IDENTITY
+-- ============================================================
+
+SELECT setval(
+               pg_get_serial_sequence('questao', 'id_questao'),
+               (SELECT MAX(id_questao) FROM questao),
+               TRUE
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('avaliacao', 'id_avaliacao'),
+               (SELECT MAX(id_avaliacao) FROM avaliacao),
+               TRUE
+       );
+
+SELECT setval(
+               pg_get_serial_sequence('alternativa', 'id_alternativa'),
+               (SELECT MAX(id_alternativa) FROM alternativa),
+               TRUE
+       );
+
+
+COMMIT;

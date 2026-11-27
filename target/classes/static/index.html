@@ -1,0 +1,2642 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Avaliações</title>
+
+    <!-- Biblioteca para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #222;
+            color: #eee;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+        }
+
+        header {
+            background: #203c60;
+            min-height: 52px;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        #usuarioInfo {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        nav {
+            background: #111;
+            padding: 9px 25px;
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #333;
+        }
+
+        button, .tab {
+            border: none;
+            border-radius: 6px;
+            padding: 9px 16px;
+            background: #30343a;
+            color: #ddd;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover, .tab:hover {
+            background: #454b55;
+        }
+
+        .tab.active {
+            background: #2875db;
+            color: white;
+        }
+
+        button.primary {
+            background: #2875db;
+            color: white;
+        }
+
+        button.danger {
+            background: #a93636;
+            color: white;
+        }
+
+        button.success {
+            background: #26784a;
+            color: white;
+        }
+
+        button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 25px;
+            background: #111;
+            border-radius: 10px;
+            min-height: 500px;
+        }
+
+        section {
+            display: none;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        h3 {
+            font-size: 17px;
+            margin-top: 28px;
+        }
+
+        input, select, textarea {
+            background: #383838;
+            color: white;
+            border: 1px solid #666;
+            border-radius: 5px;
+            padding: 11px;
+            font-size: 15px;
+            width: 100%;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: 2px solid #2875db;
+        }
+
+        textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #ddd;
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .row-fields {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .three-fields {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .four-fields {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .card {
+            background: #191919;
+            border: 1px solid #363636;
+            padding: 17px;
+            border-radius: 7px;
+            margin: 14px 0;
+        }
+
+        .list-box {
+            border: 1px solid #383838;
+            max-height: 260px;
+            overflow-y: auto;
+            padding: 12px;
+            margin: 12px 0;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 0;
+            margin: 0;
+        }
+
+        .check-item input {
+            width: auto;
+        }
+
+        .question-list {
+            border: 1px solid #383838;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .question-item {
+            display: grid;
+            grid-template-columns: 25px 100px 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 7px 0;
+        }
+
+        .question-item input[type="checkbox"] {
+            width: 16px;
+        }
+
+        .question-item input[type="number"] {
+            width: 100%;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 11px;
+            border: 1px solid #444;
+            text-align: left;
+        }
+
+        th {
+            background: #263e5c;
+        }
+
+        tr:nth-child(even) {
+            background: #1c1c1c;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        .alternative-row {
+            display: grid;
+            grid-template-columns: 1fr 100px 35px;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .alternative-row input[type="radio"] {
+            width: auto;
+        }
+
+        .small {
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        .status {
+            padding: 5px 9px;
+            border-radius: 5px;
+            font-size: 12px;
+            background: #383838;
+            display: inline-block;
+        }
+
+        .status.ok {
+            background: #205b3d;
+        }
+
+        .status.wait {
+            background: #76591f;
+        }
+
+        .status.bad {
+            background: #762c2c;
+        }
+
+        .actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .empty {
+            color: #aaa;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .login-screen {
+            max-width: 420px;
+            margin: 80px auto;
+            background: #111;
+            border: 1px solid #393939;
+            padding: 30px;
+            border-radius: 9px;
+        }
+
+        .login-screen h1 {
+            font-size: 23px;
+            text-align: center;
+        }
+
+        .login-screen button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .message {
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .message.error {
+            display: block;
+            background: #672d2d;
+        }
+
+        .message.success {
+            display: block;
+            background: #205b3d;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .chart-card {
+            min-height: 300px;
+            background: #191919;
+            border: 1px solid #383838;
+            border-radius: 7px;
+            padding: 15px;
+        }
+
+        .chart-card canvas {
+            max-height: 270px;
+        }
+
+        .result-total {
+            background: #203c60;
+            padding: 18px;
+            border-radius: 7px;
+            margin: 15px 0;
+            font-size: 19px;
+        }
+
+        .radio-answer {
+            display: flex;
+            gap: 9px;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .radio-answer input {
+            width: auto;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #383838;
+            margin: 22px 0;
+        }
+
+        #app {
+            display: none;
+        }
+
+        @media(max-width: 750px) {
+            main {
+                margin: 10px;
+                padding: 16px;
+            }
+
+            .row-fields,
+            .three-fields,
+            .four-fields,
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .students-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .question-item {
+                grid-template-columns: 20px 75px 1fr;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginScreen" class="login-screen">
+
+    <h1>Sistema de Avaliações</h1>
+
+    <p class="small" style="text-align:center">
+        Entre com seus dados para continuar.
+    </p>
+
+    <div id="loginMessage" class="message"></div>
+
+    <div class="field">
+        <label>E-mail</label>
+        <input id="loginEmail" type="email"
+               placeholder="seu@email.com">
+    </div>
+
+    <div class="field">
+        <label>Senha</label>
+        <input id="loginSenha" type="password"
+               placeholder="Sua senha">
+    </div>
+
+    <button class="primary" onclick="login()">
+        Entrar
+    </button>
+
+</div>
+
+
+<!-- APLICACAO -->
+
+<div id="app">
+
+    <header>
+
+        <h2>Sistema de Avaliações</h2>
+
+        <div id="usuarioInfo">
+            <span id="nomeUsuario"></span>
+            <button onclick="sair()">Sair</button>
+        </div>
+
+    </header>
+
+
+    <nav id="menuProfessor">
+
+        <button class="tab active" onclick="abrirAba('questoes',this)">
+            Questões
+        </button>
+
+        <button class="tab" onclick="abrirAba('avaliacoes',this)">
+            Avaliações
+        </button>
+
+        <button class="tab" onclick="abrirAba('correcao',this)">
+            Correção
+        </button>
+
+        <button class="tab" onclick="abrirAba('relatorios',this)">
+            Relatórios
+        </button>
+
+    </nav>
+
+
+    <nav id="menuAluno" style="display:none">
+
+        <button class="tab active" onclick="abrirAba('minhasAvaliacoes',this)">
+            Minhas avaliações
+        </button>
+
+        <button class="tab"
+                onclick="abrirAba('meusResultados',this); carregarResultados()">
+            Resultados
+        </button>
+
+    </nav>
+
+
+    <main>
+
+        <!-- ================================================= -->
+        <!-- QUESTOES -->
+        <!-- ================================================= -->
+
+        <section id="questoes" class="active">
+
+            <h2>Questões</h2>
+
+            <div id="questaoMessage" class="message"></div>
+
+            <div class="card">
+
+                <h3>Nova questão</h3>
+
+                <div class="field">
+                    <label>Enunciado</label>
+                    <textarea id="qEnunciado"
+                              placeholder="Digite o enunciado da questão"></textarea>
+                </div>
+
+                <div class="field">
+                    <label>Tipo de questão</label>
+
+                    <select id="qTipo" onchange="alternarTipoQuestao()">
+                        <option value="OBJETIVA">Objetiva</option>
+                        <option value="SUBJETIVA">Discursiva</option>
+                    </select>
+                </div>
+
+                <div id="objetivaCampos">
+
+                    <h3>Alternativas</h3>
+
+                    <p class="small">
+                        Adicione as alternativas e marque exatamente uma correta.
+                    </p>
+
+                    <div id="alternativasContainer"></div>
+
+                    <button onclick="adicionarAlternativa()">
+                        + Adicionar alternativa
+                    </button>
+
+                </div>
+
+                <div id="subjetivaCampos" style="display:none">
+
+                    <div class="field">
+                        <label>Expectativa de resposta / gabarito</label>
+                        <textarea id="qExpectativa"
+                                  placeholder="Descreva o que se espera na resposta"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="actions">
+                    <button class="primary" onclick="cadastrarQuestao()">
+                        Cadastrar questão
+                    </button>
+                    <button onclick="limparQuestao()">
+                        Limpar
+                    </button>
+                </div>
+
+            </div>
+
+            <h3>Questões cadastradas</h3>
+
+            <button onclick="carregarQuestoes()">
+                Atualizar lista
+            </button>
+
+            <div id="listaQuestoes"></div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- AVALIACOES -->
+        <!-- ================================================= -->
+
+        <section id="avaliacoes">
+
+            <h2>Avaliações</h2>
+
+            <div id="avaliacaoMessage" class="message"></div>
+
+            <div class="card">
+
+                <h3>Nova avaliação</h3>
+
+                <div class="row-fields">
+
+                    <div class="field">
+                        <label>Título</label>
+                        <input id="aTitulo" maxlength="100"
+                               placeholder="Título da avaliação">
+                    </div>
+
+                    <div class="field">
+                        <label>Matéria</label>
+                        <select id="aMateria">
+                            <option value="">Selecione uma matéria</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="field">
+                    <label>Descrição</label>
+                    <textarea id="aDescricao"
+                              placeholder="Descrição da avaliação"></textarea>
+                </div>
+
+                <div class="three-fields">
+
+                    <div class="field">
+                        <label>Data</label>
+                        <input id="aData" type="date">
+                    </div>
+
+                    <div class="field">
+                        <label>Horário de início</label>
+                        <input id="aInicio" type="time">
+                    </div>
+
+                    <div class="field">
+                        <label>Horário de término</label>
+                        <input id="aFim" type="time">
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <h3>Questões e seus valores</h3>
+
+                <p class="small">
+                    Marque as questões que farão parte da avaliação e informe
+                    quanto cada uma vale.
+                </p>
+
+                <div id="questoesAvaliacao" class="question-list">
+                    <div class="empty">Carregando questões...</div>
+                </div>
+
+                <hr>
+
+                <h3>Alunos disponíveis</h3>
+
+                <button onclick="marcarTodosAlunos()">
+                    Marcar todos
+                </button>
+
+                <div id="alunosAvaliacao" class="list-box">
+                    <div class="empty">Carregando alunos...</div>
+                </div>
+
+                <div class="actions">
+                    <button class="primary" onclick="cadastrarAvaliacao()">
+                        Criar avaliação
+                    </button>
+                </div>
+
+            </div>
+
+            <h3>Avaliações cadastradas</h3>
+
+            <button onclick="carregarAvaliacoes()">
+                Atualizar avaliações
+            </button>
+
+            <div id="listaAvaliacoes"></div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- CORRECAO -->
+        <!-- ================================================= -->
+
+        <section id="correcao">
+
+            <h2>Correção de questões discursivas</h2>
+
+            <p class="small">
+                Aqui aparecem as respostas discursivas que ainda precisam
+                de uma nota do professor.
+            </p>
+
+            <div id="correcaoMessage" class="message"></div>
+
+            <button onclick="carregarCorrecoes()">
+                Atualizar pendências
+            </button>
+
+            <div id="listaCorrecoes"></div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- RELATORIOS -->
+        <!-- ================================================= -->
+
+        <section id="relatorios">
+
+            <h2>Relatórios</h2>
+
+            <p class="small">
+                Consulte os indicadores das avaliações, notas e desempenho dos alunos.
+            </p>
+
+            <div class="card">
+
+                <h3>Relatório 1 — Média por avaliação</h3>
+
+                <button onclick="relatorioMedia()">
+                    Gerar relatório
+                </button>
+
+                <div id="r1Tabela"></div>
+
+                <div class="chart-card">
+                    <canvas id="graficoMedia"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Relatório 2 — Aluno versus média da turma</h3>
+
+                <div class="row-fields">
+
+                    <div class="field">
+                        <label>Aluno</label>
+                        <select id="r2Aluno"></select>
+                    </div>
+
+                    <div class="field" style="align-self:end">
+                        <button onclick="relatorioAlunoMedia()">
+                            Gerar relatório
+                        </button>
+                    </div>
+
+                </div>
+
+                <div id="r2Tabela"></div>
+
+                <div class="chart-card">
+                    <canvas id="graficoAlunoMedia"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Relatório 3 — Evolução do aluno</h3>
+
+                <div class="three-fields">
+
+                    <div class="field">
+                        <label>Aluno</label>
+                        <select id="r3Aluno"></select>
+                    </div>
+
+                    <div class="field">
+                        <label>De</label>
+                        <input id="r3De" type="date" value="2026-01-01">
+                    </div>
+
+                    <div class="field">
+                        <label>Até</label>
+                        <input id="r3Ate" type="date" value="2026-12-31">
+                    </div>
+
+                </div>
+
+                <button onclick="relatorioEvolucao()">
+                    Gerar relatório
+                </button>
+
+                <div id="r3Tabela"></div>
+
+                <div class="chart-card">
+                    <canvas id="graficoEvolucao"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Relatório 4 — Questões mais erradas</h3>
+
+                <div class="row-fields">
+
+                    <div class="field">
+                        <label>Tipo de questão</label>
+                        <select id="r4Tipo">
+                            <option value="OBJETIVA,SUBJETIVA">Todas</option>
+                            <option value="OBJETIVA">Objetivas</option>
+                            <option value="SUBJETIVA">Discursivas</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Buscar enunciado</label>
+                        <input id="r4Busca" placeholder="Buscar questão">
+                    </div>
+
+                </div>
+
+                <button onclick="relatorioQuestoesErradas()">
+                    Gerar relatório
+                </button>
+
+                <div id="r4Tabela"></div>
+
+                <div class="chart-card">
+                    <canvas id="graficoErros"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Relatório 5 — Alunos que não responderam</h3>
+
+                <button onclick="relatorioNaoResponderam()">
+                    Gerar relatório
+                </button>
+
+                <div id="r5Tabela"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- AREA DO ALUNO -->
+        <!-- ================================================= -->
+
+        <section id="minhasAvaliacoes">
+
+            <h2>Minhas avaliações</h2>
+
+            <p class="small">
+                Confira as avaliações disponibilizadas pelos professores.
+            </p>
+
+            <button onclick="carregarMinhasAvaliacoes()">
+                Atualizar
+            </button>
+
+            <div id="listaMinhasAvaliacoes"></div>
+
+        </section>
+
+
+        <section id="responderProva">
+
+            <h2 id="provaTitulo">Avaliação</h2>
+
+            <div id="provaInfo"></div>
+
+            <div id="provaQuestoes"></div>
+
+            <div class="actions">
+                <button class="primary" onclick="enviarProva()">
+                    Enviar respostas
+                </button>
+                <button onclick="abrirAba('minhasAvaliacoes')">
+                    Voltar
+                </button>
+            </div>
+
+            <div id="provaMessage" class="message"></div>
+
+        </section>
+
+
+        <section id="meusResultados">
+
+            <h2>Meus resultados</h2>
+
+            <p class="small">
+                Consulte suas notas e a situação de correção.
+            </p>
+
+            <div id="listaResultados"></div>
+
+        </section>
+
+
+        <section id="resultadoDetalhado">
+
+            <h2>Resultado da avaliação</h2>
+
+            <div id="resultadoConteudo"></div>
+
+            <button onclick="abrirAba('meusResultados')">
+                Voltar
+            </button>
+
+        </section>
+
+
+    </main>
+</div>
+
+
+<script>
+
+    // ======================================================
+    // CONFIGURACAO GERAL
+    // ======================================================
+
+    const API = "/api";
+
+    let usuario = null;
+
+    let questoesCache = [];
+    let alunosCache = [];
+    let avaliacoesCache = [];
+
+    let avaliacaoAtual = null;
+
+    let graficos = {};
+
+
+    // ======================================================
+    // FUNCOES DE API
+    // ======================================================
+
+    async function api(url, options = {}) {
+
+        const config = {
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...(options.headers || {})
+            }
+        };
+
+        let response;
+
+        try {
+            response = await fetch(API + url, config);
+        } catch (e) {
+            throw new Error(
+                "Não foi possível conectar ao servidor. Verifique se o Spring Boot está executando."
+            );
+        }
+
+        const texto = await response.text();
+
+        let dados = null;
+
+        if (texto) {
+            try {
+                dados = JSON.parse(texto);
+            } catch {
+                dados = texto;
+            }
+        }
+
+        if (!response.ok) {
+
+            const mensagem =
+                dados?.erro ||
+                dados?.message ||
+                dados?.error ||
+                "Erro ao realizar operação.";
+
+            throw new Error(mensagem);
+        }
+
+        return dados;
+    }
+
+
+    function mensagem(id, texto, tipo = "success") {
+
+        const el = document.getElementById(id);
+
+        if (!el) return;
+
+        el.className = "message " + tipo;
+        el.textContent = texto;
+
+    }
+
+
+    function esconderMensagem(id) {
+
+        const el = document.getElementById(id);
+
+        if (el) {
+            el.className = "message";
+            el.textContent = "";
+        }
+
+    }
+
+
+    function escapar(valor) {
+
+        return String(valor ?? "").replace(/[&<>"']/g, c => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[c]);
+
+    }
+
+
+    function numero(valor) {
+
+        const n = Number(valor);
+
+        return Number.isFinite(n) ? n : 0;
+
+    }
+
+
+    function dataBR(valor) {
+
+        if (!valor) return "-";
+
+        const partes = String(valor).substring(0, 10).split("-");
+
+        if (partes.length !== 3) return valor;
+
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+    }
+
+
+    function criarTabela(colunas, dados) {
+
+        if (!dados || !dados.length) {
+            return '<div class="empty">Nenhum registro encontrado.</div>';
+        }
+
+        let html = '<div class="table-wrap"><table><thead><tr>';
+
+        colunas.forEach(c => {
+            html += `<th>${escapar(c.label)}</th>`;
+        });
+
+        html += "</tr></thead><tbody>";
+
+        dados.forEach(linha => {
+
+            html += "<tr>";
+
+            colunas.forEach(c => {
+
+                let valor = linha[c.key];
+
+                if (c.format) valor = c.format(valor, linha);
+
+                html += `<td>${valor ?? "-"}</td>`;
+
+            });
+
+            html += "</tr>";
+
+        });
+
+        html += "</tbody></table></div>";
+
+        return html;
+
+    }
+
+
+    function destruirGrafico(id) {
+
+        if (graficos[id]) {
+            graficos[id].destroy();
+            delete graficos[id];
+        }
+
+    }
+
+
+    function grafico(id, tipo, labels, datasets) {
+
+        if (typeof Chart === "undefined") {
+            return;
+        }
+
+        const canvas = document.getElementById(id);
+
+        if (!canvas) return;
+
+        destruirGrafico(id);
+
+        graficos[id] = new Chart(canvas, {
+
+            type: tipo,
+
+            data: {
+                labels,
+                datasets
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "#eee"
+                        }
+                    }
+                },
+
+                scales: tipo === "pie" || tipo === "doughnut"
+                    ? {}
+                    : {
+                        x: {
+                            ticks: {
+                                color: "#ddd"
+                            },
+                            grid: {
+                                color: "#383838"
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: "#ddd"
+                            },
+                            grid: {
+                                color: "#383838"
+                            }
+                        }
+                    }
+            }
+
+        });
+
+    }
+
+
+    // ======================================================
+    // LOGIN E SAIDA
+    // ======================================================
+
+    async function login() {
+
+        esconderMensagem("loginMessage");
+
+        const email = document.getElementById("loginEmail").value.trim();
+        const senha = document.getElementById("loginSenha").value;
+
+        if (!email || !senha) {
+            mensagem("loginMessage", "Informe e-mail e senha.", "error");
+            return;
+        }
+
+        try {
+
+            const dados = await api("/login", {
+                method: "POST",
+                body: JSON.stringify({ email, senha })
+            });
+
+            usuario = dados;
+
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("app").style.display = "block";
+
+            document.getElementById("nomeUsuario").textContent =
+                dados.nome + " (" + dados.tipo.toLowerCase() + ")";
+
+            if (dados.tipo === "PROFESSOR") {
+
+                document.getElementById("menuProfessor").style.display = "flex";
+                document.getElementById("menuAluno").style.display = "none";
+
+                abrirAba("questoes");
+
+                await carregarQuestoes();
+                await carregarMaterias();
+                await carregarAlunos();
+                await carregarAvaliacoes();
+
+            } else {
+
+                document.getElementById("menuProfessor").style.display = "none";
+                document.getElementById("menuAluno").style.display = "flex";
+
+                abrirAba("minhasAvaliacoes");
+
+                await carregarMinhasAvaliacoes();
+
+            }
+
+        } catch (e) {
+
+            mensagem("loginMessage", e.message, "error");
+
+        }
+
+    }
+
+
+    function sair() {
+
+        usuario = null;
+
+        document.getElementById("app").style.display = "none";
+        document.getElementById("loginScreen").style.display = "block";
+
+        document.getElementById("loginSenha").value = "";
+
+        document.getElementById("loginEmail").value = "";
+
+    }
+
+
+    // ======================================================
+    // NAVEGACAO
+    // ======================================================
+
+    function abrirAba(id, botao = null) {
+
+        document.querySelectorAll("main section").forEach(s => {
+            s.classList.remove("active");
+        });
+
+        const secao = document.getElementById(id);
+
+        if (secao) {
+            secao.classList.add("active");
+        }
+
+        document.querySelectorAll("nav .tab").forEach(b => {
+            b.classList.remove("active");
+        });
+
+        if (botao) {
+            botao.classList.add("active");
+        } else {
+
+            const botoes = [...document.querySelectorAll("nav .tab")];
+
+            const alvo = botoes.find(b =>
+                b.getAttribute("onclick")?.includes("'" + id + "'")
+            );
+
+            if (alvo) alvo.classList.add("active");
+
+        }
+
+        // Carrega os dados automaticamente ao abrir a aba
+
+        if (!usuario) return;
+
+        if (id === "avaliacoes") {
+
+            carregarAvaliacoes();
+
+        } else if (id === "correcao") {
+
+            carregarCorrecoes();
+
+        } else if (id === "relatorios") {
+
+            relatorioMedia();
+            relatorioNaoResponderam();
+
+        } else if (id === "minhasAvaliacoes") {
+
+            carregarMinhasAvaliacoes();
+
+        }
+
+    }
+
+
+    // ======================================================
+    // QUESTOES
+    // ======================================================
+
+    function alternarTipoQuestao() {
+
+        const tipo = document.getElementById("qTipo").value;
+
+        document.getElementById("objetivaCampos").style.display =
+            tipo === "OBJETIVA" ? "block" : "none";
+
+        document.getElementById("subjetivaCampos").style.display =
+            tipo === "SUBJETIVA" ? "block" : "none";
+
+    }
+
+
+    function adicionarAlternativa(texto = "", correta = false) {
+
+        const container = document.getElementById("alternativasContainer");
+
+        const div = document.createElement("div");
+
+        div.className = "alternative-row";
+
+        div.innerHTML = `
+        <input type="text" class="altTexto"
+               placeholder="Texto da alternativa"
+               value="${escapar(texto)}">
+
+        <label class="check-item">
+            <input type="radio" name="altCorreta"
+                   ${correta ? "checked" : ""}>
+            Correta
+        </label>
+
+        <button type="button" class="danger"
+                title="Remover"
+                onclick="this.parentElement.remove()">
+            X
+        </button>
+    `;
+
+        container.appendChild(div);
+
+    }
+
+
+    function limparQuestao() {
+
+        document.getElementById("qEnunciado").value = "";
+        document.getElementById("qExpectativa").value = "";
+
+        document.getElementById("qTipo").value = "OBJETIVA";
+
+        document.getElementById("alternativasContainer").innerHTML = "";
+
+        adicionarAlternativa();
+        adicionarAlternativa();
+        adicionarAlternativa();
+        adicionarAlternativa();
+
+        alternarTipoQuestao();
+
+    }
+
+
+    async function cadastrarQuestao() {
+
+        esconderMensagem("questaoMessage");
+
+        const enunciado = document.getElementById("qEnunciado").value.trim();
+
+        const tipo = document.getElementById("qTipo").value;
+
+        if (!enunciado) {
+            mensagem("questaoMessage", "Informe o enunciado.", "error");
+            return;
+        }
+
+        let alternativas = [];
+        let expectativa = null;
+
+        if (tipo === "OBJETIVA") {
+
+            const linhas = [...document.querySelectorAll(".alternative-row")];
+
+            alternativas = linhas.map(linha => ({
+                texto: linha.querySelector(".altTexto").value.trim(),
+                correta: linha.querySelector('input[type="radio"]').checked
+            }));
+
+            if (alternativas.length < 2 ||
+                alternativas.some(a => !a.texto)) {
+
+                mensagem(
+                    "questaoMessage",
+                    "Informe pelo menos duas alternativas preenchidas.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (alternativas.filter(a => a.correta).length !== 1) {
+
+                mensagem(
+                    "questaoMessage",
+                    "Marque exatamente uma alternativa correta.",
+                    "error"
+                );
+
+                return;
+            }
+
+        } else {
+
+            expectativa = document.getElementById("qExpectativa").value.trim();
+
+            if (!expectativa) {
+
+                mensagem(
+                    "questaoMessage",
+                    "Informe a expectativa de resposta.",
+                    "error"
+                );
+
+                return;
+            }
+
+        }
+
+        try {
+
+            await api("/questoes", {
+                method: "POST",
+
+                body: JSON.stringify({
+                    enunciado,
+                    tipo,
+                    expectativa,
+                    alternativas
+                })
+            });
+
+            mensagem(
+                "questaoMessage",
+                "Questão cadastrada com sucesso!"
+            );
+
+            limparQuestao();
+
+            await carregarQuestoes();
+
+        } catch (e) {
+
+            mensagem("questaoMessage", e.message, "error");
+
+        }
+
+    }
+
+
+    async function carregarQuestoes() {
+
+        try {
+
+            questoesCache = await api("/questoes");
+
+            if (!Array.isArray(questoesCache)) {
+                questoesCache = [];
+            }
+
+            const lista = document.getElementById("listaQuestoes");
+
+            if (!questoesCache.length) {
+
+                lista.innerHTML = '<div class="empty">Nenhuma questão cadastrada.</div>';
+
+            } else {
+
+                lista.innerHTML = criarTabela(
+                    [
+                        { key: "id", label: "ID" },
+                        { key: "tipo", label: "Tipo" },
+                        { key: "enunciado", label: "Enunciado" },
+                        {
+                            key: "expectativa",
+                            label: "Expectativa",
+                            format: v => escapar(v || "-")
+                        }
+                    ],
+                    questoesCache.map(q => ({
+                        id: q.id,
+                        tipo: escapar(q.tipo),
+                        enunciado: escapar(q.enunciado),
+                        expectativa: q.expectativa
+                    }))
+                );
+
+            }
+
+            renderizarQuestoesAvaliacao();
+
+        } catch (e) {
+
+            document.getElementById("listaQuestoes").innerHTML =
+                `<div class="empty">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    function renderizarQuestoesAvaliacao() {
+
+        const container = document.getElementById("questoesAvaliacao");
+
+        if (!questoesCache.length) {
+
+            container.innerHTML = '<div class="empty">Cadastre questões primeiro.</div>';
+            return;
+
+        }
+
+        container.innerHTML = questoesCache.map(q => `
+
+        <div class="question-item">
+
+            <input type="checkbox"
+                   class="questaoSelecionada"
+                   value="${q.id}">
+
+            <input type="number"
+                   class="valorQuestao"
+                   data-id="${q.id}"
+                   min="0.01"
+                   step="0.01"
+                   value="1"
+                   title="Valor da questão">
+
+            <span>
+                #${q.id} [${escapar(q.tipo.toLowerCase())}]
+                ${escapar(q.enunciado)}
+            </span>
+
+        </div>
+
+    `).join("");
+
+    }
+
+
+    // ======================================================
+    // MATERIAS E ALUNOS
+    // ======================================================
+
+    async function carregarMaterias() {
+
+        try {
+
+            const materias = await api(
+                "/materias?email=" + encodeURIComponent(usuario.email)
+            );
+
+            const select = document.getElementById("aMateria");
+
+            select.innerHTML = '<option value="">Selecione uma matéria</option>';
+
+            materias.forEach(m => {
+
+                select.innerHTML += `
+                <option value="${escapar(m.sigla)}">
+                    ${escapar(m.sigla)} - ${escapar(m.nome)}
+                </option>
+            `;
+
+            });
+
+        } catch (e) {
+
+            mensagem("avaliacaoMessage", e.message, "error");
+
+        }
+
+    }
+
+
+    async function carregarAlunos() {
+
+        try {
+
+            alunosCache = await api("/alunos");
+
+            if (!Array.isArray(alunosCache)) alunosCache = [];
+
+            renderizarAlunos();
+
+            ["r2Aluno", "r3Aluno"].forEach(id => {
+
+                const select = document.getElementById(id);
+
+                select.innerHTML = '<option value="">Selecione um aluno</option>';
+
+                alunosCache.forEach(a => {
+
+                    select.innerHTML += `
+                    <option value="${escapar(a.email)}">
+                        ${escapar(a.nome)}
+                    </option>
+                `;
+
+                });
+
+            });
+
+        } catch (e) {
+
+            document.getElementById("alunosAvaliacao").innerHTML =
+                `<div class="empty">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    function renderizarAlunos() {
+
+        const container = document.getElementById("alunosAvaliacao");
+
+        container.innerHTML = `
+        <div class="students-grid">
+            ${alunosCache.map(a => `
+                <label class="check-item">
+                    <input type="checkbox"
+                           class="alunoSelecionado"
+                           value="${escapar(a.email)}">
+                    ${escapar(a.nome)}
+                </label>
+            `).join("")}
+        </div>
+    `;
+
+    }
+
+
+    function marcarTodosAlunos() {
+
+        const caixas = [...document.querySelectorAll(".alunoSelecionado")];
+
+        const todosMarcados = caixas.length &&
+            caixas.every(c => c.checked);
+
+        caixas.forEach(c => {
+            c.checked = !todosMarcados;
+        });
+
+    }
+
+
+    // ======================================================
+    // CADASTRAR AVALIACAO
+    // ======================================================
+
+    async function cadastrarAvaliacao() {
+
+        esconderMensagem("avaliacaoMessage");
+
+        const titulo = document.getElementById("aTitulo").value.trim();
+        const descricao = document.getElementById("aDescricao").value.trim();
+        const siglaMateria = document.getElementById("aMateria").value;
+
+        const data = document.getElementById("aData").value;
+        const inicio = document.getElementById("aInicio").value;
+        const fim = document.getElementById("aFim").value;
+
+        const selecionadas = [
+            ...document.querySelectorAll(".questaoSelecionada:checked")
+        ];
+
+        const alunos = [
+            ...document.querySelectorAll(".alunoSelecionado:checked")
+        ].map(a => a.value);
+
+        if (!titulo || !descricao || !siglaMateria ||
+            !data || !inicio || !fim) {
+
+            mensagem(
+                "avaliacaoMessage",
+                "Preencha todos os campos da avaliação.",
+                "error"
+            );
+
+            return;
+        }
+
+        if (fim <= inicio) {
+
+            mensagem(
+                "avaliacaoMessage",
+                "O horário final deve ser posterior ao inicial.",
+                "error"
+            );
+
+            return;
+        }
+
+        if (!selecionadas.length || !alunos.length) {
+
+            mensagem(
+                "avaliacaoMessage",
+                "Selecione pelo menos uma questão e um aluno.",
+                "error"
+            );
+
+            return;
+        }
+
+        const itens = selecionadas.map(c => {
+
+            const valorInput = document.querySelector(
+                `.valorQuestao[data-id="${c.value}"]`
+            );
+
+            return {
+                idQuestao: Number(c.value),
+                valor: Number(valorInput.value)
+            };
+
+        });
+
+        if (itens.some(i => !Number.isFinite(i.valor) || i.valor <= 0)) {
+
+            mensagem(
+                "avaliacaoMessage",
+                "Todos os valores das questões devem ser maiores que zero.",
+                "error"
+            );
+
+            return;
+        }
+
+        const dados = {
+
+            titulo,
+            descricao,
+            siglaMateria,
+            data,
+            inicio,
+            fim,
+
+            emailProfessor: usuario.email,
+
+            itens,
+            alunos
+
+        };
+
+        try {
+
+            const resultado = await api("/avaliacoes", {
+                method: "POST",
+                body: JSON.stringify(dados)
+            });
+
+            mensagem(
+                "avaliacaoMessage",
+                "Avaliação criada com sucesso! ID: " + resultado.id
+            );
+
+            document.getElementById("aTitulo").value = "";
+            document.getElementById("aDescricao").value = "";
+
+            document.getElementById("aData").value = "";
+            document.getElementById("aInicio").value = "";
+            document.getElementById("aFim").value = "";
+
+            document.querySelectorAll(".questaoSelecionada").forEach(c => {
+                c.checked = false;
+            });
+
+            document.querySelectorAll(".alunoSelecionado").forEach(c => {
+                c.checked = false;
+            });
+
+            await carregarAvaliacoes();
+
+        } catch (e) {
+
+            mensagem("avaliacaoMessage", e.message, "error");
+
+        }
+
+    }
+
+
+    // ======================================================
+    // LISTAR AVALIACOES
+    // ======================================================
+
+    async function carregarAvaliacoes() {
+
+        try {
+
+            avaliacoesCache = await api(
+                "/avaliacoes?professor=" +
+                encodeURIComponent(usuario.email)
+            );
+
+            const container = document.getElementById("listaAvaliacoes");
+
+            container.innerHTML = criarTabela(
+                [
+                    { key: "id_avaliacao", label: "ID" },
+                    { key: "titulo", label: "Título" },
+                    { key: "materia", label: "Matéria" },
+                    {
+                        key: "data_avaliacao",
+                        label: "Data",
+                        format: dataBR
+                    },
+                    { key: "questoes", label: "Questões" },
+                    { key: "alunos", label: "Alunos" }
+                ],
+                avaliacoesCache
+            );
+
+        } catch (e) {
+
+            document.getElementById("listaAvaliacoes").innerHTML =
+                `<div class="empty">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    // ======================================================
+    // AREA DO ALUNO
+    // ======================================================
+
+    async function carregarMinhasAvaliacoes() {
+
+        try {
+
+            const dados = await api(
+                "/avaliacoes/do-aluno?email=" +
+                encodeURIComponent(usuario.email)
+            );
+
+            const container = document.getElementById("listaMinhasAvaliacoes");
+
+            if (!dados.length) {
+
+                container.innerHTML =
+                    '<div class="empty">Nenhuma avaliação disponível.</div>';
+
+                return;
+
+            }
+
+            container.innerHTML = dados.map(a => {
+
+                const pendente = a.aguardando_correcao === true ||
+                    a.aguardando_correcao === "true";
+
+                return `
+
+                <div class="card">
+
+                    <h3>${escapar(a.titulo)}</h3>
+
+                    <p>Matéria: ${escapar(a.materia || "-")}</p>
+
+                    <p>Data: ${dataBR(a.data_avaliacao || a.data)}</p>
+
+                    <p>
+                        Situação:
+                        ${pendente
+                    ? '<span class="status wait">Aguardando correção</span>'
+                    : '<span class="status ok">Disponível para consulta</span>'
+                }
+                    </p>
+
+                    <div class="actions">
+
+                        <button class="primary"
+                                onclick="abrirProva(${Number(a.id_avaliacao)})">
+                            ${numero(a.respondidas) > 0
+                    ? "Abrir avaliação"
+                    : "Responder avaliação"}
+                        </button>
+
+                        <button onclick="verResultado(${Number(a.id_avaliacao)})">
+                            Ver resultado
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            }).join("");
+
+        } catch (e) {
+
+            document.getElementById("listaMinhasAvaliacoes").innerHTML =
+                `<div class="empty">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    async function abrirProva(id) {
+
+        try {
+
+            const questoes = await api(`/avaliacoes/${id}/prova`);
+
+            avaliacaoAtual = {
+                id,
+                questoes
+            };
+
+            document.getElementById("provaTitulo").textContent =
+                "Avaliação #" + id;
+
+            document.getElementById("provaInfo").innerHTML =
+                `<p class="small">${questoes.length} questões</p>`;
+
+            const container = document.getElementById("provaQuestoes");
+
+            container.innerHTML = questoes.map((q, indice) => {
+
+                let respostaHTML = "";
+
+                if (q.tipo === "OBJETIVA") {
+
+                    respostaHTML = (q.opcoes || []).map((op, i) => {
+
+                        const texto = typeof op === "string"
+                            ? op
+                            : op.texto;
+
+                        const idAlt = typeof op === "string"
+                            ? String(i + 1)
+                            : String(op.id);
+
+                        return `
+                        <label class="radio-answer">
+                            <input type="radio"
+                                   name="resposta_${q.id}"
+                                   value="${escapar(idAlt)}">
+                            ${escapar(texto)}
+                        </label>
+                    `;
+
+                    }).join("");
+
+                } else {
+
+                    respostaHTML = `
+                    <textarea
+                        id="resposta_${q.id}"
+                        placeholder="Digite sua resposta">
+                    </textarea>
+                `;
+
+                }
+
+                return `
+
+                <div class="card">
+
+                    <h3>
+                        Questão ${indice + 1}
+                        — ${escapar(q.tipo)}
+                    </h3>
+
+                    <p>${escapar(q.enunciado)}</p>
+
+                    <p class="small">
+                        Valor: ${escapar(q.valor)}
+                    </p>
+
+                    ${respostaHTML}
+
+                </div>
+
+            `;
+
+            }).join("");
+
+            esconderMensagem("provaMessage");
+
+            abrirAba("responderProva");
+
+        } catch (e) {
+
+            alert(e.message);
+
+        }
+
+    }
+
+
+    async function enviarProva() {
+
+        if (!avaliacaoAtual) return;
+
+        const respostas = {};
+
+        for (const q of avaliacaoAtual.questoes) {
+
+            let valor = "";
+
+            if (q.tipo === "OBJETIVA") {
+
+                const selecionada = document.querySelector(
+                    `input[name="resposta_${q.id}"]:checked`
+                );
+
+                valor = selecionada ? selecionada.value : "";
+
+            } else {
+
+                valor = document.getElementById(
+                    `resposta_${q.id}`
+                ).value.trim();
+
+            }
+
+            respostas[String(q.id)] = valor;
+
+        }
+
+        try {
+
+            await api(
+                `/avaliacoes/${avaliacaoAtual.id}/respostas`,
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+                        email: usuario.email,
+                        respostas
+                    })
+                }
+            );
+
+            mensagem(
+                "provaMessage",
+                "Respostas enviadas com sucesso!"
+            );
+
+            setTimeout(() => {
+
+                abrirAba("minhasAvaliacoes");
+
+                carregarMinhasAvaliacoes();
+
+            }, 1200);
+
+        } catch (e) {
+
+            mensagem("provaMessage", e.message, "error");
+
+        }
+
+    }
+
+
+    // ======================================================
+    // RESULTADOS DO ALUNO
+    // ======================================================
+
+    async function carregarResultados() {
+
+        try {
+
+            const avaliacoes = await api(
+                "/avaliacoes/do-aluno?email=" +
+                encodeURIComponent(usuario.email)
+            );
+
+            const container = document.getElementById("listaResultados");
+
+            container.innerHTML = avaliacoes.map(a => {
+
+                const pendente = a.aguardando_correcao === true ||
+                    a.aguardando_correcao === "true";
+
+                return `
+
+                <div class="card">
+
+                    <h3>${escapar(a.titulo)}</h3>
+
+                    <p>
+                        Nota:
+                        ${pendente
+                    ? "Aguardando correção"
+                    : numero(a.nota_total).toFixed(2)
+                }
+                    </p>
+
+                    <p class="small">
+                        Valor total: ${numero(a.valor_total).toFixed(2)}
+                    </p>
+
+                    <button onclick="verResultado(${Number(a.id_avaliacao)})">
+                        Detalhes
+                    </button>
+
+                </div>
+
+            `;
+
+            }).join("") || '<div class="empty">Nenhum resultado disponível.</div>';
+
+        } catch (e) {
+
+            document.getElementById("listaResultados").innerHTML =
+                `<div class="empty">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    async function verResultado(id) {
+
+        try {
+
+            const dados = await api(
+                `/avaliacoes/${id}/resultado?email=` +
+                encodeURIComponent(usuario.email)
+            );
+
+            const total = dados.total || {};
+
+            const pendente = total.aguardando_correcao === true ||
+                total.aguardando_correcao === "true";
+
+            let html = `
+
+            <div class="result-total">
+
+                Nota total:
+                ${pendente
+                ? "Aguardando correção"
+                : numero(total.nota_total).toFixed(2)
+            }
+
+                <br>
+
+                <span class="small">
+                    Valor máximo: ${numero(total.valor_total).toFixed(2)}
+                </span>
+
+            </div>
+
+        `;
+
+            html += criarTabela(
+                [
+                    { key: "enunciado", label: "Questão" },
+                    { key: "valor", label: "Valor" },
+                    { key: "resposta_aluno", label: "Resposta discursiva" },
+                    { key: "alternativa_escolhida", label: "Alternativa" },
+                    { key: "nota_obtida", label: "Nota" }
+                ],
+                (dados.itens || []).map(i => ({
+                    enunciado: escapar(i.enunciado),
+                    valor: i.valor,
+                    resposta_aluno: escapar(i.resposta_aluno || "-"),
+                    alternativa_escolhida: escapar(i.alternativa_escolhida || "-"),
+                    nota_obtida: i.nota_obtida == null
+                        ? "Pendente"
+                        : numero(i.nota_obtida).toFixed(2)
+                }))
+            );
+
+            document.getElementById("resultadoConteudo").innerHTML = html;
+
+            abrirAba("resultadoDetalhado");
+
+        } catch (e) {
+
+            alert(e.message);
+
+        }
+
+    }
+
+
+    // ======================================================
+    // CORRECAO
+    // ======================================================
+
+    async function carregarCorrecoes() {
+
+        try {
+
+            const dados = await api(
+                "/correcao?professor=" +
+                encodeURIComponent(usuario.email)
+            );
+
+            const container = document.getElementById("listaCorrecoes");
+
+            if (!dados.length) {
+
+                container.innerHTML =
+                    '<div class="empty">Não existem respostas pendentes.</div>';
+
+                return;
+
+            }
+
+            container.innerHTML = dados.map((r, i) => `
+
+            <div class="card">
+
+                <h3>${escapar(r.titulo)}</h3>
+
+                <p>
+                    Aluno: <strong>${escapar(r.nome)}</strong>
+                    (${escapar(r.email_aluno)})
+                </p>
+
+                <p>
+                    Questão #${r.id_questao}:
+                    ${escapar(r.enunciado)}
+                </p>
+
+                <p>
+                    <strong>Resposta do aluno:</strong>
+                </p>
+
+                <div class="card">
+                    ${escapar(r.resposta_aluno || "Sem resposta")}
+                </div>
+
+                <p>
+                    <strong>Expectativa de resposta:</strong>
+                </p>
+
+                <div class="card">
+                    ${escapar(r.expectativa || "-")}
+                </div>
+
+                <p class="small">
+                    Valor máximo: ${numero(r.valor).toFixed(2)}
+                </p>
+
+                <div class="row-fields">
+
+                    <div class="field">
+                        <label>Nota atribuída</label>
+
+                        <input type="number"
+                               id="nota_${i}"
+                               min="0"
+                               max="${numero(r.valor)}"
+                               step="0.01"
+                               placeholder="0 a ${numero(r.valor)}">
+                    </div>
+
+                </div>
+
+                <button class="success"
+                        onclick="corrigirResposta(
+                            '${escapar(r.email_aluno)}',
+                            ${Number(r.id_avaliacao)},
+                            ${Number(r.id_questao)},
+                            ${numero(r.valor)},
+                            'nota_${i}'
+                        )">
+                    Salvar correção
+                </button>
+
+            </div>
+
+        `).join("");
+
+        } catch (e) {
+
+            document.getElementById("listaCorrecoes").innerHTML =
+                `<div class="empty">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    async function corrigirResposta(
+        email,
+        idAvaliacao,
+        idQuestao,
+        valorMaximo,
+        campo
+    ) {
+
+        const nota = Number(document.getElementById(campo).value);
+
+        if (!Number.isFinite(nota) ||
+            nota < 0 ||
+            nota > valorMaximo) {
+
+            mensagem(
+                "correcaoMessage",
+                `A nota deve estar entre 0 e ${valorMaximo}.`,
+                "error"
+            );
+
+            return;
+
+        }
+
+        try {
+
+            await api("/correcao", {
+
+                method: "PUT",
+
+                body: JSON.stringify({
+                    email,
+                    idAvaliacao,
+                    idQuestao,
+                    nota
+                })
+
+            });
+
+            mensagem(
+                "correcaoMessage",
+                "Correção registrada com sucesso!"
+            );
+
+            await carregarCorrecoes();
+
+        } catch (e) {
+
+            mensagem("correcaoMessage", e.message, "error");
+
+        }
+
+    }
+
+
+    // ======================================================
+    // RELATORIO 1 - MEDIA POR AVALIACAO
+    // ======================================================
+
+    async function relatorioMedia() {
+
+        try {
+
+            const dados = await api(
+                "/relatorios/media-por-avaliacao"
+            );
+
+            document.getElementById("r1Tabela").innerHTML =
+                criarTabela(
+                    [
+                        { key: "titulo", label: "Avaliação" },
+                        {
+                            key: "data_avaliacao",
+                            label: "Data",
+                            format: dataBR
+                        },
+                        {
+                            key: "media",
+                            label: "Média",
+                            format: v => v == null ? "-" : numero(v).toFixed(2)
+                        },
+                        { key: "alunos_concluintes", label: "Concluintes" },
+                        { key: "alunos_inscritos", label: "Inscritos" }
+                    ],
+                    dados
+                );
+
+            grafico(
+                "graficoMedia",
+                "bar",
+                dados.map(d => d.titulo),
+                [{
+                    label: "Média da avaliação",
+                    data: dados.map(d => numero(d.media))
+                }]
+            );
+
+        } catch (e) {
+
+            document.getElementById("r1Tabela").innerHTML =
+                `<div class="message error">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    // ======================================================
+    // RELATORIO 2 - ALUNO VERSUS MEDIA
+    // ======================================================
+
+    async function relatorioAlunoMedia() {
+
+        const email = document.getElementById("r2Aluno").value;
+
+        if (!email) {
+            alert("Selecione um aluno.");
+            return;
+        }
+
+        try {
+
+            const dados = await api(
+                "/relatorios/aluno-vs-media?email=" +
+                encodeURIComponent(email)
+            );
+
+            document.getElementById("r2Tabela").innerHTML =
+                criarTabela(
+                    [
+                        { key: "titulo", label: "Avaliação" },
+                        {
+                            key: "nota_aluno",
+                            label: "Nota do aluno",
+                            format: v => numero(v).toFixed(2)
+                        },
+                        {
+                            key: "media_demais_alunos",
+                            label: "Média dos demais",
+                            format: v => v == null ? "-" : numero(v).toFixed(2)
+                        }
+                    ],
+                    dados
+                );
+
+            grafico(
+                "graficoAlunoMedia",
+                "bar",
+                dados.map(d => d.titulo),
+                [
+                    {
+                        label: "Nota do aluno",
+                        data: dados.map(d => numero(d.nota_aluno))
+                    },
+                    {
+                        label: "Média dos demais",
+                        data: dados.map(d => numero(d.media_demais_alunos))
+                    }
+                ]
+            );
+
+        } catch (e) {
+
+            document.getElementById("r2Tabela").innerHTML =
+                `<div class="message error">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    // ======================================================
+    // RELATORIO 3 - EVOLUCAO
+    // ======================================================
+
+    async function relatorioEvolucao() {
+
+        const email = document.getElementById("r3Aluno").value;
+
+        const de = document.getElementById("r3De").value;
+
+        const ate = document.getElementById("r3Ate").value;
+
+        if (!email || !de || !ate) {
+            alert("Preencha aluno e período.");
+            return;
+        }
+
+        try {
+
+            const dados = await api(
+                "/relatorios/evolucao?" +
+                "email=" + encodeURIComponent(email) +
+                "&de=" + encodeURIComponent(de) +
+                "&ate=" + encodeURIComponent(ate)
+            );
+
+            document.getElementById("r3Tabela").innerHTML =
+                criarTabela(
+                    [
+                        { key: "titulo", label: "Avaliação" },
+                        {
+                            key: "data_avaliacao",
+                            label: "Data",
+                            format: dataBR
+                        },
+                        {
+                            key: "nota",
+                            label: "Nota",
+                            format: v => numero(v).toFixed(2)
+                        }
+                    ],
+                    dados
+                );
+
+            grafico(
+                "graficoEvolucao",
+                "line",
+                dados.map(d => dataBR(d.data_avaliacao)),
+                [{
+                    label: "Evolução das notas",
+                    data: dados.map(d => numero(d.nota)),
+                    tension: 0.25
+                }]
+            );
+
+        } catch (e) {
+
+            document.getElementById("r3Tabela").innerHTML =
+                `<div class="message error">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    // ======================================================
+    // RELATORIO 4 - QUESTOES MAIS ERRADAS
+    // ======================================================
+
+    async function relatorioQuestoesErradas() {
+
+        const tipos = document.getElementById("r4Tipo").value;
+
+        const busca = document.getElementById("r4Busca").value;
+
+        try {
+
+            const dados = await api(
+                "/relatorios/questoes-mais-erradas?" +
+                "tipos=" + encodeURIComponent(tipos) +
+                "&busca=" + encodeURIComponent(busca)
+            );
+
+            document.getElementById("r4Tabela").innerHTML =
+                criarTabela(
+                    [
+                        { key: "id_questao", label: "ID" },
+                        { key: "enunciado", label: "Questão" },
+                        { key: "tipo", label: "Tipo" },
+                        { key: "total_respostas", label: "Respostas" },
+                        { key: "respostas_erradas", label: "Erros" },
+                        {
+                            key: "percentual_erros",
+                            label: "Erros (%)",
+                            format: v => numero(v).toFixed(2) + "%"
+                        }
+                    ],
+                    dados
+                );
+
+            grafico(
+                "graficoErros",
+                "bar",
+                dados.map(d => "Questão " + d.id_questao),
+                [{
+                    label: "Percentual de erros",
+                    data: dados.map(d => numero(d.percentual_erros))
+                }]
+            );
+
+        } catch (e) {
+
+            document.getElementById("r4Tabela").innerHTML =
+                `<div class="message error">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    // ======================================================
+    // RELATORIO 5 - NAO RESPONDERAM
+    // ======================================================
+
+    async function relatorioNaoResponderam() {
+
+        try {
+
+            const dados = await api(
+                "/relatorios/quem-nao-respondeu"
+            );
+
+            document.getElementById("r5Tabela").innerHTML =
+                criarTabela(
+                    [
+                        { key: "titulo", label: "Avaliação" },
+                        {
+                            key: "data_avaliacao",
+                            label: "Data",
+                            format: dataBR
+                        },
+                        { key: "nome", label: "Aluno" },
+                        { key: "email", label: "E-mail" }
+                    ],
+                    dados
+                );
+
+        } catch (e) {
+
+            document.getElementById("r5Tabela").innerHTML =
+                `<div class="message error">${escapar(e.message)}</div>`;
+
+        }
+
+    }
+
+
+    // ======================================================
+    // INICIALIZACAO
+    // ======================================================
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        adicionarAlternativa();
+        adicionarAlternativa();
+        adicionarAlternativa();
+        adicionarAlternativa();
+
+        alternarTipoQuestao();
+
+        document.getElementById("loginSenha")
+            .addEventListener("keydown", e => {
+
+                if (e.key === "Enter") login();
+
+            });
+
+    });
+
+</script>
+
+</body>
+</html>
